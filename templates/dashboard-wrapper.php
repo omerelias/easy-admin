@@ -12,11 +12,18 @@
         
         <!-- פילטר תאריכים -->
         <div class="date-filter-container">
-            <label for="date-from">טווח תאריכים:</label>
+            <label for="date-from">תאריך הזמנה:</label>
             <div class="date-inputs">
                 <input type="date" id="date-from" placeholder="מתאריך" />
                 <span class="date-separator">עד</span>
                 <input type="date" id="date-to" placeholder="עד תאריך" />
+            </div>
+            
+            <label for="shipping-date-from" style="margin-top: 15px;">תאריך אספקה:</label>
+            <div class="date-inputs">
+                <input type="date" id="shipping-date-from" placeholder="מתאריך" />
+                <span class="date-separator">עד</span>
+                <input type="date" id="shipping-date-to" placeholder="עד תאריך" />
             </div>
         </div>
         
@@ -35,7 +42,8 @@
                 $status_class = 'order-' . $status;
                 $shipping_date = get_post_meta($order->get_id(), 'ocws_shipping_info_date', true);
                 
-                echo '<div class="order-summary ' . $status_class . '">';
+//                echo '<div class="order-summary ' . $status_class . '">';
+                echo '<div class="order-summary">';
                 echo '<div class="order-header">';
                 echo '<strong>#' . $order->get_id() . '</strong>';
                 echo '<span class="order-date">' . $order->get_date_created()->format('d/m/Y') . '</span>';

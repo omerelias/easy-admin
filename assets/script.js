@@ -6,6 +6,8 @@ jQuery(function($){
     let currentOrderSearchTerm = '';
     let currentDateFrom = '';
     let currentDateTo = '';
+    let currentShippingDateFrom = '';
+    let currentShippingDateTo = '';
     let orderOffset = 10;
     
     // אתחול Select2
@@ -83,11 +85,14 @@ jQuery(function($){
     // ביצוע חיפוש הזמנות
     function performOrderSearch() {
         showOrderLoader();
+        
         $.post(wcMobileDashboard.ajax_url, {
             action: 'search_orders',
             search_term: currentOrderSearchTerm,
             date_from: currentDateFrom,
             date_to: currentDateTo,
+            shipping_date_from: currentShippingDateFrom,
+            shipping_date_to: currentShippingDateTo,
             offset: 0
         }).then(function(response) {
             $('#orders-container').html(response);
@@ -184,6 +189,13 @@ jQuery(function($){
     $('#date-from, #date-to').on('change', function() {
         currentDateFrom = $('#date-from').val();
         currentDateTo = $('#date-to').val();
+        debouncedOrderSearch();
+    });
+    
+    // פילטר תאריכי אספקה
+    $('#shipping-date-from, #shipping-date-to').on('change', function() {
+        currentShippingDateFrom = $('#shipping-date-from').val();
+        currentShippingDateTo = $('#shipping-date-to').val();
         debouncedOrderSearch();
     });
     

@@ -163,12 +163,15 @@ class WC_Mobile_Dashboard {
         $search_term = sanitize_text_field($_POST['search_term'] ?? '');
         $date_from = sanitize_text_field($_POST['date_from'] ?? '');
         $date_to = sanitize_text_field($_POST['date_to'] ?? '');
+        $shipping_date_from = sanitize_text_field($_POST['shipping_date_from'] ?? '');
+        $shipping_date_to = sanitize_text_field($_POST['shipping_date_to'] ?? '');
         $offset = intval($_POST['offset'] ?? 0);
         $limit = 10;
 
-        // הגדרת תנאי מטא
+        // תנאים לפי מטא
         $meta_query = [];
 
+        // חיפוש לפי שם פרטי/משפחה
         if (!empty($search_term)) {
             $meta_query[] = [
                 'relation' => 'OR',
@@ -185,7 +188,39 @@ class WC_Mobile_Dashboard {
             ];
         }
 
-        // הגדרת תנאי תאריך
+        // פילטור לפי תאריך אספקה (פורמט d/m/Y)
+        if (!empty($shipping_date_from) && !empty($shipping_date_to)) {
+            $from = DateTime::createFromFormat('Y-m-d', $shipping_date_from);
+            $to   = DateTime::createFromFormat('Y-m-d', $shipping_date_to);
+
+            if ($from && $to) {
+                $meta_query[] = [
+                    'key'     => 'ocws_shipping_info_date',
+                    'value'   => [$from->format('d/m/Y'), $to->format('d/m/Y')],
+                    'compare' => 'BETWEEN'
+                ];
+            }
+        } elseif (!empty($shipping_date_from)) {
+            $from = DateTime::createFromFormat('Y-m-d', $shipping_date_from);
+            if ($from) {
+                $meta_query[] = [
+                    'key'     => 'ocws_shipping_info_date',
+                    'value'   => $from->format('d/m/Y'),
+                    'compare' => '>='
+                ];
+            }
+        } elseif (!empty($shipping_date_to)) {
+            $to = DateTime::createFromFormat('Y-m-d', $shipping_date_to);
+            if ($to) {
+                $meta_query[] = [
+                    'key'     => 'ocws_shipping_info_date',
+                    'value'   => $to->format('d/m/Y'),
+                    'compare' => '<='
+                ];
+            }
+        }
+
+        // פילטור לפי תאריך יצירת ההזמנה
         $date_query = [];
         if (!empty($date_from) || !empty($date_to)) {
             $date_query['inclusive'] = true;
@@ -193,12 +228,13 @@ class WC_Mobile_Dashboard {
             if (!empty($date_from)) {
                 $date_query['after'] = $date_from . ' 00:00:00';
             }
+
             if (!empty($date_to)) {
                 $date_query['before'] = $date_to . ' 23:59:59';
             }
         }
 
-        // הגדרת שאילתה רגילה
+        // בניית השאילתה
         $args = [
             'post_type'      => 'shop_order',
             'post_status'    => ['wc-pending', 'wc-processing', 'wc-on-hold', 'wc-completed', 'wc-cancelled', 'wc-refunded'],
@@ -209,11 +245,15 @@ class WC_Mobile_Dashboard {
         ];
 
         if (!empty($meta_query)) {
-            $args['meta_query'] = $meta_query;
+            if (count($meta_query) > 1) {
+                $args['meta_query'] = array_merge(['relation' => 'AND'], $meta_query);
+            } else {
+                $args['meta_query'] = $meta_query;
+            }
         }
 
         if (!empty($date_query)) {
-            $args['date_query'] = [$date_query]; // עטוף במערך!
+            $args['date_query'] = [$date_query];
         }
 
         // לוגים
@@ -228,7 +268,7 @@ class WC_Mobile_Dashboard {
                 $order = wc_get_order($post->ID);
                 $orders[] = $order;
 
-                // לוג
+                // לוג להזמנה
                 error_log("Order #{$order->get_id()} – {$order->get_billing_first_name()} {$order->get_billing_last_name()}");
             }
         }
