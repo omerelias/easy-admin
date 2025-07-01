@@ -9,6 +9,8 @@ class WC_Mobile_Dashboard {
         add_action('wp_ajax_toggle_product_stock', [ $this, 'toggle_product_stock' ]);
         add_action('wp_ajax_load_products_by_category', [ $this, 'load_products_by_category' ]);
         add_action('wp_ajax_search_products_by_name', [ $this, 'search_products_by_name' ]);
+        add_action('wp_ajax_search_orders', [ $this, 'search_orders' ]);
+        add_action('wp_ajax_load_more_orders', [ $this, 'load_more_orders' ]);
     }
 
     public function add_dashboard_menu() {
@@ -155,6 +157,126 @@ class WC_Mobile_Dashboard {
         }
         
         wp_die();
+    }
+
+    public function search_orders() {
+        $search_term = sanitize_text_field($_POST['search_term'] ?? '');
+        $date_from = sanitize_text_field($_POST['date_from'] ?? '');
+        $date_to = sanitize_text_field($_POST['date_to'] ?? '');
+        $offset = intval($_POST['offset'] ?? 0);
+        $limit = 10;
+        
+        $args = [
+            'limit' => $limit,
+            'offset' => $offset,
+            'orderby' => 'date',
+            'order' => 'DESC',
+            'status' => ['wc-pending', 'wc-processing', 'wc-on-hold', 'wc-completed', 'wc-cancelled', 'wc-refunded']
+        ];
+        
+        // חיפוש לפי טקסט
+        if (!empty($search_term)) {
+            $args['meta_query'] = [
+                'relation' => 'OR',
+                [
+                    'key' => '_billing_first_name',
+                    'value' => $search_term,
+                    'compare' => 'LIKE'
+                ],
+                [
+                    'key' => '_billing_last_name',
+                    'value' => $search_term,
+                    'compare' => 'LIKE'
+                ]
+            ];
+            
+            // חיפוש לפי מספר הזמנה
+            if (is_numeric($search_term)) {
+                $args['meta_query'][] = [
+                    'key' => '_order_key',
+                    'value' => $search_term,
+                    'compare' => 'LIKE'
+                ];
+            }
+        }
+        
+        // פילטר תאריכים
+        if (!empty($date_from) || !empty($date_to)) {
+            $date_query = [];
+            
+            if (!empty($date_from)) {
+                $date_query['after'] = $date_from . ' 00:00:00';
+            }
+            
+            if (!empty($date_to)) {
+                $date_query['before'] = $date_to . ' 23:59:59';
+            }
+            
+            $date_query['inclusive'] = true;
+            $args['date_query'] = $date_query;
+        }
+        
+        $orders = wc_get_orders($args);
+        
+        if (empty($orders)) {
+            echo '<div class="no-orders">לא נמצאו הזמנות</div>';
+        } else {
+            foreach ($orders as $order) {
+                $this->render_order_item($order);
+            }
+        }
+        
+        wp_die();
+    }
+    
+    public function load_more_orders() {
+        $offset = intval($_POST['offset'] ?? 0);
+        $limit = 10;
+        
+        $args = [
+            'limit' => $limit,
+            'offset' => $offset,
+            'orderby' => 'date',
+            'order' => 'DESC',
+            'status' => ['wc-pending', 'wc-processing', 'wc-on-hold', 'wc-completed', 'wc-cancelled', 'wc-refunded']
+        ];
+        
+        $orders = wc_get_orders($args);
+        
+        if (empty($orders)) {
+            echo '<div class="no-more-orders">אין עוד הזמנות לטעינה</div>';
+        } else {
+            foreach ($orders as $order) {
+                $this->render_order_item($order);
+            }
+        }
+        
+        wp_die();
+    }
+    
+    private function render_order_item($order) {
+        $status = $order->get_status();
+        $status_class = 'order-' . $status;
+        $shipping_date = get_post_meta($order->get_id(), 'ocws_shipping_info_date', true);
+        
+        echo '<div class="order-summary ' . $status_class . '">';
+        echo '<div class="order-header">';
+        echo '<strong>#' . $order->get_id() . '</strong>';
+        echo '<span class="order-date">' . $order->get_date_created()->format('d/m/Y') . '</span>';
+        echo '<span class="order-status">' . wc_get_order_status_name($status) . '</span>';
+        echo '</div>';
+        echo '<div class="order-customer">' . $order->get_billing_first_name() . ' ' . $order->get_billing_last_name() . '</div>';
+        echo '<div class="order-total">' . wc_price($order->get_total()) . '</div>';
+        if ($shipping_date) {
+            echo '<div class="shipping-date">תאריך אספקה: ' . $shipping_date . '</div>';
+        }
+        echo '<button class="toggle-order-details" data-order-id="' . $order->get_id() . '">👁️ פרטים</button>';
+        echo '<div class="order-details hidden" id="order-' . $order->get_id() . '">';
+        foreach ($order->get_items() as $item) {
+            echo '<div>' . $item->get_name() . ' x' . $item->get_quantity() . '</div>';
+        }
+        echo '</div>';
+        echo '</div>';
     }
 
     public function add_viewport_meta() {

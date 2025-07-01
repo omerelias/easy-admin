@@ -846,3 +846,267 @@ html, body {
 .clear-search-btn:active {
     transform: scale(0.95);
 }
+
+/* עיצוב חיפוש הזמנות */
+.order-search-container {
+    margin-bottom: 20px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 20px;
+    border-radius: 16px;
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.2);
+    max-width: 100%;
+    overflow: hidden;
+    position: relative;
+    color: white;
+}
+
+.order-search-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+    border-radius: 16px;
+    pointer-events: none;
+}
+
+.order-search-container label {
+    display: block;
+    margin-bottom: 12px;
+    font-weight: 700;
+    font-size: 16px;
+    color: #ffffff;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    position: relative;
+    z-index: 1;
+}
+
+.order-search-container input[type="text"] {
+    width: calc(100% - 60px);
+    padding: 12px 16px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-radius: 12px;
+    background: rgba(255,255,255,0.1);
+    color: #333;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    position: relative;
+    z-index: 1;
+}
+
+.order-search-container input[type="text"]:focus {
+    outline: none;
+    border-color: rgba(255,255,255,0.6);
+    box-shadow: 0 0 0 3px rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.95);
+}
+
+.order-search-container input[type="text"]::placeholder {
+    color: #666;
+    font-style: normal;
+}
+
+/* עיצוב פילטר תאריכים */
+.date-filter-container {
+    margin-bottom: 20px;
+    background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+    padding: 20px;
+    border-radius: 16px;
+    box-shadow: 0 8px 25px rgba(252, 182, 159, 0.2);
+    max-width: 100%;
+    overflow: hidden;
+    position: relative;
+    color: #333;
+}
+
+.date-filter-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+    border-radius: 16px;
+    pointer-events: none;
+}
+
+.date-filter-container label {
+    display: block;
+    margin-bottom: 12px;
+    font-weight: 700;
+    font-size: 16px;
+    color: #333;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    position: relative;
+    z-index: 1;
+}
+
+.date-inputs {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    position: relative;
+    z-index: 1;
+}
+
+.date-inputs input[type="date"] {
+    width:50%;
+    flex: 1;
+    padding: 12px 16px;
+    border: 2px solid rgba(0,0,0,0.1);
+    border-radius: 12px;
+    background: rgba(255,255,255,0.9);
+    color: #333;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.date-inputs input[type="date"]:focus {
+    outline: none;
+    border-color: #fcb69f;
+    box-shadow: 0 0 0 3px rgba(252, 182, 159, 0.2);
+    background: #ffffff;
+}
+
+.date-separator {
+    font-weight: 600;
+    color: #333;
+    font-size: 14px;
+}
+
+/* כפתור טעינה נוספת */
+.load-more-container {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.load-more-btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 25px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.load-more-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+}
+
+.load-more-btn:active {
+    transform: translateY(0);
+}
+
+/* עיצוב משופר להזמנות */
+.order-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.order-header strong {
+    font-size: 16px;
+    font-weight: 700;
+    color: #ffffff;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+.order-date {
+    font-size: 12px;
+    background: rgba(255,255,255,0.2);
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-weight: 500;
+}
+
+.order-status {
+    font-size: 11px;
+    background: rgba(255,255,255,0.3);
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.order-customer {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #ffffff;
+}
+
+.order-total {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: #ffffff;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+.shipping-date {
+    font-size: 12px;
+    background: rgba(255,255,255,0.15);
+    padding: 6px 10px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    color: #ffffff;
+    font-weight: 500;
+}
+
+/* הודעות הזמנות */
+.no-orders, .no-more-orders {
+    text-align: center;
+    padding: 40px 20px;
+    border-radius: 16px;
+    margin: 20px 0;
+    font-size: 16px;
+    font-weight: 600;
+    max-width: 100%;
+    word-wrap: break-word;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.no-orders::before, .no-more-orders::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+    border-radius: 16px;
+    pointer-events: none;
+}
+
+.no-orders {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #ffffff;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+.no-more-orders {
+    background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+    color: #333;
+}

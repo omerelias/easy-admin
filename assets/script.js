@@ -2,6 +2,11 @@ jQuery(function($){
     let selectedCategories = new Set();
     let searchTimeout;
     let currentSearchTerm = '';
+    let orderSearchTimeout;
+    let currentOrderSearchTerm = '';
+    let currentDateFrom = '';
+    let currentDateTo = '';
+    let orderOffset = 10;
     
     // אתחול Select2
     function initSelect2() {
@@ -75,6 +80,63 @@ jQuery(function($){
         }, 500);
     }
     
+    // ביצוע חיפוש הזמנות
+    function performOrderSearch() {
+        showOrderLoader();
+        
+        $.post(wcMobileDashboard.ajax_url, {
+            action: 'search_orders',
+            search_term: currentOrderSearchTerm,
+            date_from: currentDateFrom,
+            date_to: currentDateTo,
+            offset: 0
+        }).then(function(response) {
+            $('#orders-container').html(response);
+            hideOrderLoader();
+            orderOffset = 10;
+        }).catch(function() {
+            $('#orders-container').html('<div class="error">שגיאה בחיפוש ההזמנות</div>');
+            hideOrderLoader();
+        });
+    }
+    
+    // חיפוש הזמנות עם debounce
+    function debouncedOrderSearch() {
+        clearTimeout(orderSearchTimeout);
+        orderSearchTimeout = setTimeout(function() {
+            performOrderSearch();
+        }, 500);
+    }
+    
+    // הצגת/הסתרת loader הזמנות
+    function showOrderLoader() {
+        $('#orders-container').addClass('loading');
+    }
+    
+    function hideOrderLoader() {
+        $('#orders-container').removeClass('loading');
+    }
+    
+    // טעינת הזמנות נוספות
+    function loadMoreOrders() {
+        showOrderLoader();
+        
+        $.post(wcMobileDashboard.ajax_url, {
+            action: 'load_more_orders',
+            offset: orderOffset
+        }).then(function(response) {
+            if (response.includes('no-more-orders')) {
+                $('#load-more-orders').hide();
+            } else {
+                $('#orders-container').append(response);
+                orderOffset += 10;
+            }
+            hideOrderLoader();
+        }).catch(function() {
+            hideOrderLoader();
+        });
+    }
+    
     // מעבר בין טאבים
     $('.tab-switch').on('click', function(){
         $('.tab-content').addClass('hidden');
@@ -99,11 +161,36 @@ jQuery(function($){
         debouncedSearch();
     });
     
-    // כפתור נקה חיפוש
+    // כפתור נקה חיפוש מוצרים
     $('#clear-search').on('click', function() {
         $('#product-search').val('');
         currentSearchTerm = '';
         performSearch();
+    });
+    
+    // חיפוש הזמנות
+    $('#order-search').on('input', function() {
+        currentOrderSearchTerm = $(this).val();
+        debouncedOrderSearch();
+    });
+    
+    // כפתור נקה חיפוש הזמנות
+    $('#clear-order-search').on('click', function() {
+        $('#order-search').val('');
+        currentOrderSearchTerm = '';
+        performOrderSearch();
+    });
+    
+    // פילטר תאריכים הזמנות
+    $('#date-from, #date-to').on('change', function() {
+        currentDateFrom = $('#date-from').val();
+        currentDateTo = $('#date-to').val();
+        debouncedOrderSearch();
+    });
+    
+    // כפתור טעינה נוספת
+    $('#load-more-orders').on('click', function() {
+        loadMoreOrders();
     });
 
     // לחיצה על כפתור קטגוריה
