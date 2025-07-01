@@ -11,9 +11,12 @@
         ]);
 
         foreach ($orders as $order) {
-            echo '<div class="order-summary">';
+            $status = $order->get_status();
+            $status_class = 'order-' . $status;
+            
+            echo '<div class="order-summary ' . $status_class . '">';
             echo '<strong>#' . $order->get_id() . '</strong> | ' . wc_price($order->get_total());
-            echo '<button class="toggle-order-details" data-order-id="' . $order->get_id() . '">פרטים</button>';
+            echo '<button class="toggle-order-details" data-order-id="' . $order->get_id() . '">👁️ פרטים</button>';
             echo '<div class="order-details hidden" id="order-' . $order->get_id() . '">';
             foreach ($order->get_items() as $item) {
                 echo '<div>' . $item->get_name() . ' x' . $item->get_quantity() . '</div>';
@@ -26,10 +29,10 @@
 
     <div class="tab-content hidden" id="tab-stock">
         <!-- Loader -->
-        <div id="products-loader" class="loader hidden">
-            <div class="spinner"></div>
-            <span>טוען מוצרים...</span>
-        </div>
+<!--        <div id="products-loader" class="loader hidden">-->
+<!--            <div class="spinner"></div>-->
+<!--            <span>טוען מוצרים...</span>-->
+<!--        </div>-->
         
         <!-- Select2 לחיפוש קטגוריות -->
         <div class="category-search-container">

@@ -5,6 +5,7 @@ class WC_Mobile_Dashboard {
     public function __construct() {
         add_action('admin_menu', [ $this, 'add_dashboard_menu' ]);
         add_action('admin_enqueue_scripts', [ $this, 'enqueue_assets' ]);
+        add_action('admin_head', [ $this, 'add_viewport_meta' ]);
         add_action('wp_ajax_toggle_product_stock', [ $this, 'toggle_product_stock' ]);
         add_action('wp_ajax_load_products_by_category', [ $this, 'load_products_by_category' ]);
     }
@@ -100,5 +101,12 @@ class WC_Mobile_Dashboard {
         }
 
         wp_die();
+    }
+
+    public function add_viewport_meta() {
+        $screen = get_current_screen();
+        if ($screen && $screen->id === 'toplevel_page_wc-mobile-dashboard') {
+            echo '<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">';
+        }
     }
 }
