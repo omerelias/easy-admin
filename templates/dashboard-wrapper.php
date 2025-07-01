@@ -25,6 +25,21 @@
     </div>
 
     <div class="tab-content hidden" id="tab-stock">
+        <!-- Loader -->
+        <div id="products-loader" class="loader hidden">
+            <div class="spinner"></div>
+            <span>טוען מוצרים...</span>
+        </div>
+        
+        <!-- Select2 לחיפוש קטגוריות -->
+        <div class="category-search-container">
+            <label for="category-select">חיפוש קטגוריה:</label>
+            <select id="category-select" multiple="multiple" style="width: 100%;" placeholder="בחר או חפש קטגוריות...">
+                <!-- האופציות יתווספו ב-JavaScript -->
+            </select>
+        </div>
+        
+        <!-- כפתורי קטגוריות מהירים -->
         <?php
         $terms = get_terms(['taxonomy' => 'product_cat', 'hide_empty' => false]);
         echo '<div class="categories">';

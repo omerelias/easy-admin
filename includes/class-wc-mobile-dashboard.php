@@ -23,10 +23,28 @@ class WC_Mobile_Dashboard {
 
     public function enqueue_assets() {
         wp_enqueue_style('wc-mobile-dashboard-style', plugin_dir_url(__FILE__) . '../assets/style.css');
-        wp_enqueue_script('wc-mobile-dashboard-script', plugin_dir_url(__FILE__) . '../assets/script.js', ['jquery'], null, true);
+        
+        // הוספת Select2
+        wp_enqueue_style('select2', 'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css');
+        wp_enqueue_script('select2', 'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js', ['jquery'], null, true);
+        
+        wp_enqueue_script('wc-mobile-dashboard-script', plugin_dir_url(__FILE__) . '../assets/script.js', ['jquery', 'select2'], null, true);
+        
+        // הוספת נתוני קטגוריות ל-localization
+        $categories = get_terms(['taxonomy' => 'product_cat', 'hide_empty' => false]);
+        $categories_data = [];
+        foreach ($categories as $cat) {
+            $categories_data[] = [
+                'id' => $cat->term_id,
+                'name' => $cat->name,
+                'slug' => $cat->slug
+            ];
+        }
+        
         wp_localize_script('wc-mobile-dashboard-script', 'wcMobileDashboard', [
             'ajax_url' => admin_url('admin-ajax.php'),
-            'nonce' => wp_create_nonce('toggle_stock')
+            'nonce' => wp_create_nonce('toggle_stock'),
+            'categories' => $categories_data
         ]);
     }
 

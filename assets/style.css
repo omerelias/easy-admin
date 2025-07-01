@@ -130,3 +130,146 @@
 .product-row input:checked + .slider:before {
     transform: translateX(20px);
 }
+
+/* עיצוב Select2 */
+.category-search-container {
+    margin-bottom: 15px;
+    background: #fff;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.category-search-container label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    font-size: 14px;
+    color: #333;
+}
+
+.select2-container--default .select2-selection--multiple {
+    border: 1px solid #ddd !important;
+    border-radius: 6px !important;
+    min-height: 40px !important;
+    padding: 5px !important;
+}
+
+.select2-container--default .select2-selection--multiple .select2-selection__choice {
+    background-color: #007cba !important;
+    border-color: #005a87 !important;
+    color: white !important;
+    border-radius: 4px !important;
+    padding: 2px 8px !important;
+    margin: 2px !important;
+}
+
+.select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
+    color: white !important;
+    margin-left: 5px !important;
+}
+
+.select2-dropdown {
+    border: 1px solid #ddd !important;
+    border-radius: 6px !important;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1) !important;
+}
+
+/* כפתורים פעילים */
+.categories button.active {
+    background: #007cba !important;
+    color: white !important;
+    border-color: #005a87 !important;
+    box-shadow: 0 2px 4px rgba(0,124,186,0.3);
+}
+
+.categories button:hover {
+    background: #f0f0f0;
+    border-color: #bbb;
+}
+
+.categories button.active:hover {
+    background: #005a87 !important;
+}
+
+/* Loader/Spinner */
+.loader {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    background: rgba(255,255,255,0.9);
+    position: relative;
+    z-index: 100;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #007cba;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 10px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.loader span {
+    color: #666;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+/* מצבי הודעות */
+.no-selection, .no-products, .error {
+    text-align: center;
+    padding: 30px 20px;
+    background: #f9f9f9;
+    border-radius: 8px;
+    margin: 20px 0;
+    font-size: 14px;
+    color: #666;
+}
+
+.error {
+    background: #fee;
+    color: #c33;
+    border: 1px solid #fcc;
+}
+
+.no-products {
+    background: #fff4e6;
+    color: #e67300;
+    border: 1px solid #ffd699;
+}
+
+/* אפקט Loading למכולה */
+#products-container.loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+/* התאמה למובייל */
+@media (max-width: 600px) {
+    .category-search-container {
+        margin-left: -5px;
+        margin-right: -5px;
+        border-radius: 0;
+    }
+    
+    .select2-container--default .select2-selection--multiple {
+        min-height: 45px !important;
+    }
+    
+    .categories button {
+        font-size: 13px;
+        padding: 8px;
+    }
+}
