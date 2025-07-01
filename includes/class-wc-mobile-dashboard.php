@@ -8,6 +8,7 @@ class WC_Mobile_Dashboard {
         add_action('admin_head', [ $this, 'add_viewport_meta' ]);
         add_action('wp_ajax_toggle_product_stock', [ $this, 'toggle_product_stock' ]);
         add_action('wp_ajax_load_products_by_category', [ $this, 'load_products_by_category' ]);
+        add_action('wp_ajax_search_products_by_name', [ $this, 'search_products_by_name' ]);
     }
 
     public function add_dashboard_menu() {
@@ -100,6 +101,59 @@ class WC_Mobile_Dashboard {
             echo '</div>';
         }
 
+        wp_die();
+    }
+
+    public function search_products_by_name() {
+        $search_term = sanitize_text_field($_POST['search_term']);
+        $category_ids = isset($_POST['category_ids']) ? array_map('intval', $_POST['category_ids']) : [];
+        
+        if (empty($search_term) && empty($category_ids)) {
+            wp_send_json_error('נדרש חיפוש או בחירת קטגוריה');
+            return;
+        }
+        
+        $args = [
+            'limit' => 50,
+            'status' => 'publish'
+        ];
+        
+        // אם יש חיפוש טקסט
+        if (!empty($search_term)) {
+            $args['s'] = $search_term;
+        }
+        
+        // אם יש קטגוריות נבחרות
+        if (!empty($category_ids)) {
+            $category_slugs = [];
+            foreach ($category_ids as $cat_id) {
+                $term = get_term($cat_id, 'product_cat');
+                if ($term && !is_wp_error($term)) {
+                    $category_slugs[] = $term->slug;
+                }
+            }
+            if (!empty($category_slugs)) {
+                $args['category'] = $category_slugs;
+            }
+        }
+        
+        $products = wc_get_products($args);
+        
+        if (empty($products)) {
+            echo '<div class="no-products">לא נמצאו מוצרים</div>';
+        } else {
+            foreach ($products as $product) {
+                echo '<div class="product-row">';
+                echo '<img src="' . get_the_post_thumbnail_url($product->get_id(), 'thumbnail') . '" />';
+                echo '<span>' . esc_html($product->get_name()) . '</span>';
+                echo '<label class="switch">';
+                echo '<input type="checkbox" class="stock-toggle" data-product-id="' . $product->get_id() . '" ' . checked($product->is_in_stock(), true, false) . ' />';
+                echo '<span class="slider round"></span>';
+                echo '</label>';
+                echo '</div>';
+            }
+        }
+        
         wp_die();
     }
 

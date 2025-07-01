@@ -14,9 +14,10 @@
             $status = $order->get_status();
             $status_class = 'order-' . $status;
             
-            echo '<div class="order-summary ' . $status_class . '">';
+//            echo '<div class="order-summary ' . $status_class . '">';
+            echo '<div class="order-summary ">';
             echo '<strong>#' . $order->get_id() . '</strong> | ' . wc_price($order->get_total());
-            echo '<button class="toggle-order-details" data-order-id="' . $order->get_id() . '">👁️ פרטים</button>';
+            echo '<button class="toggle-order-details" data-order-id="' . $order->get_id() . '">פרטים</button>';
             echo '<div class="order-details hidden" id="order-' . $order->get_id() . '">';
             foreach ($order->get_items() as $item) {
                 echo '<div>' . $item->get_name() . ' x' . $item->get_quantity() . '</div>';
@@ -33,7 +34,9 @@
 <!--            <div class="spinner"></div>-->
 <!--            <span>טוען מוצרים...</span>-->
 <!--        </div>-->
-        
+
+
+
         <!-- Select2 לחיפוש קטגוריות -->
         <div class="category-search-container">
             <label for="category-select">חיפוש קטגוריה:</label>
@@ -41,6 +44,14 @@
                 <!-- האופציות יתווספו ב-JavaScript -->
             </select>
         </div>
+        
+        <!-- חיפוש מוצרים -->
+        <div class="product-search-container">
+            <label for="product-search">חיפוש מוצר:</label>
+            <input type="text" id="product-search" placeholder="הקלד שם מוצר לחיפוש..." />
+            <button id="clear-search" class="clear-search-btn">🗑️ נקה</button>
+        </div>
+
         
         <!-- כפתורי קטגוריות מהירים -->
         <?php

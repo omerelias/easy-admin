@@ -1,5 +1,7 @@
 jQuery(function($){
     let selectedCategories = new Set();
+    let searchTimeout;
+    let currentSearchTerm = '';
     
     // אתחול Select2
     function initSelect2() {
@@ -20,7 +22,7 @@ jQuery(function($){
             selected.forEach(id => selectedCategories.add(parseInt(id)));
             
             updateButtonStates();
-            loadFilteredProducts();
+            performSearch();
         });
     }
     
@@ -43,30 +45,34 @@ jQuery(function($){
         $('#products-container').removeClass('loading');
     }
     
-    // טעינת מוצרים מהקטגוריות הנבחרות
-    function loadFilteredProducts() {
-        if (selectedCategories.size === 0) {
-            $('#products-container').html('<div class="no-selection">בחר קטגוריות להצגת מוצרים</div>');
+    // ביצוע חיפוש מוצרים
+    function performSearch() {
+        if (currentSearchTerm.trim() === '' && selectedCategories.size === 0) {
+            $('#products-container').html('<div class="no-selection">הקלד שם מוצר או בחר קטגוריות להצגת מוצרים</div>');
             return;
         }
         
         showLoader();
         
-        const promises = Array.from(selectedCategories).map(catId => {
-            return $.post(wcMobileDashboard.ajax_url, {
-                action: 'load_products_by_category',
-                cat_id: catId
-            });
-        });
-        
-        Promise.all(promises).then(responses => {
-            const allProducts = responses.join('');
-            $('#products-container').html(allProducts || '<div class="no-products">לא נמצאו מוצרים</div>');
+        $.post(wcMobileDashboard.ajax_url, {
+            action: 'search_products_by_name',
+            search_term: currentSearchTerm,
+            category_ids: Array.from(selectedCategories)
+        }).then(function(response) {
+            $('#products-container').html(response);
             hideLoader();
-        }).catch(() => {
-            $('#products-container').html('<div class="error">שגיאה בטעינת המוצרים</div>');
+        }).catch(function() {
+            $('#products-container').html('<div class="error">שגיאה בחיפוש המוצרים</div>');
             hideLoader();
         });
+    }
+    
+    // חיפוש מוצרים עם debounce
+    function debouncedSearch() {
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(function() {
+            performSearch();
+        }, 500);
     }
     
     // מעבר בין טאבים
@@ -85,6 +91,19 @@ jQuery(function($){
     $(document).on('click', '.toggle-order-details', function(){
         const id = $(this).data('order-id');
         $('#order-' + id).toggleClass('hidden');
+    });
+
+    // חיפוש מוצרים
+    $('#product-search').on('input', function() {
+        currentSearchTerm = $(this).val();
+        debouncedSearch();
+    });
+    
+    // כפתור נקה חיפוש
+    $('#clear-search').on('click', function() {
+        $('#product-search').val('');
+        currentSearchTerm = '';
+        performSearch();
     });
 
     // לחיצה על כפתור קטגוריה
