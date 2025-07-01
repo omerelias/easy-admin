@@ -188,38 +188,6 @@ class WC_Mobile_Dashboard {
             ];
         }
 
-        // פילטור לפי תאריך אספקה (פורמט d/m/Y)
-        if (!empty($shipping_date_from) && !empty($shipping_date_to)) {
-            $from = DateTime::createFromFormat('Y-m-d', $shipping_date_from);
-            $to   = DateTime::createFromFormat('Y-m-d', $shipping_date_to);
-
-            if ($from && $to) {
-                $meta_query[] = [
-                    'key'     => 'ocws_shipping_info_date',
-                    'value'   => [$from->format('d/m/Y'), $to->format('d/m/Y')],
-                    'compare' => 'BETWEEN'
-                ];
-            }
-        } elseif (!empty($shipping_date_from)) {
-            $from = DateTime::createFromFormat('Y-m-d', $shipping_date_from);
-            if ($from) {
-                $meta_query[] = [
-                    'key'     => 'ocws_shipping_info_date',
-                    'value'   => $from->format('d/m/Y'),
-                    'compare' => '>='
-                ];
-            }
-        } elseif (!empty($shipping_date_to)) {
-            $to = DateTime::createFromFormat('Y-m-d', $shipping_date_to);
-            if ($to) {
-                $meta_query[] = [
-                    'key'     => 'ocws_shipping_info_date',
-                    'value'   => $to->format('d/m/Y'),
-                    'compare' => '<='
-                ];
-            }
-        }
-
         // פילטור לפי תאריך יצירת ההזמנה
         $date_query = [];
         if (!empty($date_from) || !empty($date_to)) {
@@ -238,8 +206,8 @@ class WC_Mobile_Dashboard {
         $args = [
             'post_type'      => 'shop_order',
             'post_status'    => ['wc-pending', 'wc-processing', 'wc-on-hold', 'wc-completed', 'wc-cancelled', 'wc-refunded'],
-            'posts_per_page' => $limit,
-            'offset'         => $offset,
+            'posts_per_page' => $limit * 5, // ניקח יותר כדי לסנן ידנית
+            'offset'         => 0,
             'orderby'        => 'date',
             'order'          => 'DESC',
         ];
@@ -265,20 +233,49 @@ class WC_Mobile_Dashboard {
 
         if ($query->have_posts()) {
             foreach ($query->posts as $post) {
-                $order = wc_get_order($post->ID);
-                $orders[] = $order;
+                $order_id = $post->ID;
+                $order = wc_get_order($order_id);
 
-                // לוג להזמנה
-                error_log("Order #{$order->get_id()} – {$order->get_billing_first_name()} {$order->get_billing_last_name()}");
+                // קבלת תאריך אספקה
+                $shipping_date_raw = get_post_meta($order_id, 'ocws_shipping_info_date', true);
+                $shipping_date = DateTime::createFromFormat('d/m/Y', $shipping_date_raw);
+
+                // סינון ידני לפי תאריך אספקה
+                $include = true;
+
+                if ($shipping_date) {
+                    if (!empty($shipping_date_from)) {
+                        $from = DateTime::createFromFormat('Y-m-d', $shipping_date_from);
+                        if ($from && $shipping_date < $from) {
+                            $include = false;
+                        }
+                    }
+
+                    if (!empty($shipping_date_to)) {
+                        $to = DateTime::createFromFormat('Y-m-d', $shipping_date_to);
+                        if ($to && $shipping_date > $to) {
+                            $include = false;
+                        }
+                    }
+                } elseif (!empty($shipping_date_from) || !empty($shipping_date_to)) {
+                    // אם לא הצלחנו לפענח תאריך והמשתמש כן ביקש סינון – נפסול
+                    $include = false;
+                }
+
+                if ($include) {
+                    $orders[] = $order;
+                    error_log("Order #{$order->get_id()} – {$order->get_billing_first_name()} {$order->get_billing_last_name()} – אספקה: $shipping_date_raw");
+                }
             }
         }
 
-        error_log('--- Orders Returned: ' . count($orders) . ' ---');
+        error_log('--- Orders Returned After Shipping Date Filter: ' . count($orders) . ' ---');
 
-        // תצוגה
+        // הצגת תוצאות
         if (empty($orders)) {
             echo '<div class="no-orders">לא נמצאו הזמנות</div>';
         } else {
+            $orders = array_slice($orders, $offset, $limit); // הגבלת תוצאות לאחר סינון
             foreach ($orders as $order) {
                 $this->render_order_item($order);
             }
