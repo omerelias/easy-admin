@@ -165,59 +165,77 @@ class WC_Mobile_Dashboard {
         $date_to = sanitize_text_field($_POST['date_to'] ?? '');
         $offset = intval($_POST['offset'] ?? 0);
         $limit = 10;
-        
-        $args = [
-            'limit' => $limit,
-            'offset' => $offset,
-            'orderby' => 'date',
-            'order' => 'DESC',
-            'status' => ['wc-pending', 'wc-processing', 'wc-on-hold', 'wc-completed', 'wc-cancelled', 'wc-refunded']
-        ];
-        
-        // חיפוש לפי טקסט
+
+        // הגדרת תנאי מטא
+        $meta_query = [];
+
         if (!empty($search_term)) {
-            $args['meta_query'] = [
+            $meta_query[] = [
                 'relation' => 'OR',
                 [
-                    'key' => '_billing_first_name',
-                    'value' => $search_term,
+                    'key'     => '_billing_first_name',
+                    'value'   => $search_term,
                     'compare' => 'LIKE'
                 ],
                 [
-                    'key' => '_billing_last_name',
-                    'value' => $search_term,
+                    'key'     => '_billing_last_name',
+                    'value'   => $search_term,
                     'compare' => 'LIKE'
                 ]
             ];
-            
-            // חיפוש לפי מספר הזמנה
-            if (is_numeric($search_term)) {
-                $args['meta_query'][] = [
-                    'key' => '_order_key',
-                    'value' => $search_term,
-                    'compare' => 'LIKE'
-                ];
-            }
         }
-        
-        // פילטר תאריכים
+
+        // הגדרת תנאי תאריך
+        $date_query = [];
         if (!empty($date_from) || !empty($date_to)) {
-            $date_query = [];
-            
+            $date_query['inclusive'] = true;
+
             if (!empty($date_from)) {
                 $date_query['after'] = $date_from . ' 00:00:00';
             }
-            
             if (!empty($date_to)) {
                 $date_query['before'] = $date_to . ' 23:59:59';
             }
-            
-            $date_query['inclusive'] = true;
-            $args['date_query'] = $date_query;
         }
-        
-        $orders = wc_get_orders($args);
-        
+
+        // הגדרת שאילתה רגילה
+        $args = [
+            'post_type'      => 'shop_order',
+            'post_status'    => ['wc-pending', 'wc-processing', 'wc-on-hold', 'wc-completed', 'wc-cancelled', 'wc-refunded'],
+            'posts_per_page' => $limit,
+            'offset'         => $offset,
+            'orderby'        => 'date',
+            'order'          => 'DESC',
+        ];
+
+        if (!empty($meta_query)) {
+            $args['meta_query'] = $meta_query;
+        }
+
+        if (!empty($date_query)) {
+            $args['date_query'] = [$date_query]; // עטוף במערך!
+        }
+
+        // לוגים
+        error_log('--- WP_Query Order Search Params ---');
+        error_log(print_r($args, true));
+
+        $query = new WP_Query($args);
+        $orders = [];
+
+        if ($query->have_posts()) {
+            foreach ($query->posts as $post) {
+                $order = wc_get_order($post->ID);
+                $orders[] = $order;
+
+                // לוג
+                error_log("Order #{$order->get_id()} – {$order->get_billing_first_name()} {$order->get_billing_last_name()}");
+            }
+        }
+
+        error_log('--- Orders Returned: ' . count($orders) . ' ---');
+
+        // תצוגה
         if (empty($orders)) {
             echo '<div class="no-orders">לא נמצאו הזמנות</div>';
         } else {
@@ -225,7 +243,7 @@ class WC_Mobile_Dashboard {
                 $this->render_order_item($order);
             }
         }
-        
+
         wp_die();
     }
     

@@ -823,8 +823,8 @@ html, body {
 }
 
 .clear-search-btn {
-    width: 50px;
-    height: 45px;
+    width: 54px;
+    height: 55px;
     border: none;
     background: rgba(255,255,255,0.2);
     color: white;
@@ -834,7 +834,6 @@ html, body {
     position: relative;
     z-index: 1;
     font-size: 16px;
-    margin-left: 10px;
     vertical-align: top;
 }
 
@@ -958,7 +957,7 @@ html, body {
 }
 
 .date-inputs input[type="date"] {
-    width:50%;
+    width:20%;
     flex: 1;
     padding: 12px 16px;
     border: 2px solid rgba(0,0,0,0.1);
@@ -1109,4 +1108,8 @@ html, body {
 .no-more-orders {
     background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
     color: #333;
+}
+
+#orders-container{
+    padding:0 !important;
 }

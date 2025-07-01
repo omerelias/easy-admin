@@ -83,7 +83,6 @@ jQuery(function($){
     // ביצוע חיפוש הזמנות
     function performOrderSearch() {
         showOrderLoader();
-        
         $.post(wcMobileDashboard.ajax_url, {
             action: 'search_orders',
             search_term: currentOrderSearchTerm,

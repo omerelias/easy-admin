@@ -6,7 +6,7 @@
         <!-- חיפוש הזמנות -->
         <div class="order-search-container">
             <label for="order-search">חיפוש הזמנות:</label>
-            <input type="text" id="order-search" placeholder="חיפוש לפי שם לקוח או מספר הזמנה..." />
+            <input type="text" id="order-search" placeholder="חיפוש שם/מספר" />
             <button id="clear-order-search" class="clear-search-btn">🗑️ נקה</button>
         </div>
         
@@ -20,11 +20,7 @@
             </div>
         </div>
         
-        <!-- כפתור טעינה נוספת -->
-        <div class="load-more-container">
-            <button id="load-more-orders" class="load-more-btn">טען עוד הזמנות</button>
-        </div>
-        
+
         <!-- מכולת הזמנות -->
         <div id="orders-container">
             <?php
@@ -60,6 +56,11 @@
             }
             ?>
         </div>
+        <!-- כפתור טעינה נוספת -->
+        <div class="load-more-container">
+            <button id="load-more-orders" class="load-more-btn">טען עוד הזמנות</button>
+        </div>
+
     </div>
 
     <div class="tab-content hidden" id="tab-stock">
