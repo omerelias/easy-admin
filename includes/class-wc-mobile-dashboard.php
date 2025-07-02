@@ -11,7 +11,45 @@ class WC_Mobile_Dashboard {
         add_action('wp_ajax_search_products_by_name', [ $this, 'search_products_by_name' ]);
         add_action('wp_ajax_search_orders', [ $this, 'search_orders' ]);
         add_action('wp_ajax_load_more_orders', [ $this, 'load_more_orders' ]);
+        add_action('admin_init', [ $this, 'add_role_redirect' ]);
+        add_action('admin_head', function () {
+            echo '<style>#wpadminbar,.notice { display: none !important; }</style>';
+        });
+
     }
+
+    public function add_role_redirect() {
+        if (
+            is_admin() &&
+            !defined('DOING_AJAX')
+        ) {
+            // הגדרת התפקידים המותרים
+            $allowed_roles = ['shop_manager'];
+
+            // בדיקה אם לאחד מהתפקידים האלו יש למשתמש הנוכחי
+            $user = wp_get_current_user();
+            $has_allowed_role = array_intersect($allowed_roles, (array) $user->roles);
+
+            if (!empty($has_allowed_role)) {
+                $current_url = $_SERVER['REQUEST_URI'];
+
+                if (strpos($current_url, '/wp-admin') !== false) {
+                    if (
+                        !isset($_GET['page']) ||
+                        (isset($_GET['page']) && $_GET['page'] !== 'wc-mobile-dashboard')
+                    ) {
+                        wp_safe_redirect(admin_url('admin.php?page=wc-mobile-dashboard'));
+                        exit;
+                    }
+                }
+            }
+        }
+    }
+
+
+
+
+
 
     public function add_dashboard_menu() {
         add_menu_page(
@@ -340,4 +378,5 @@ class WC_Mobile_Dashboard {
             echo '<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">';
         }
     }
+
 }

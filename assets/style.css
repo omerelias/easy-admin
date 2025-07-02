@@ -278,7 +278,7 @@ html, body {
 }
 
 #wpadminbar{
-    display:none 
+    display:none
 }
 
 .product-row {
@@ -485,7 +485,7 @@ html, body {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.2s ease;
+    transition: all 0.2s ease;	color: #000 !important;
 }
 
 .select2-container--default .select2-selection--multiple .select2-selection__choice__remove:hover {
@@ -509,24 +509,12 @@ html, body {
 
 /* עיצוב שדה החיפוש של Select2 */
 .select2-search__field {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif !important;
-    font-size: 14px !important;
-    font-weight: 500 !important;
-    text-align: center !important;
-    padding: 8px 12px !important;
-    border: none !important;
-    border-radius: 8px !important;
-    background: transparent !important;
-    color: #333 !important;
-    transition: all 0.3s ease !important;
-    width: 100% !important;
-    box-sizing: border-box !important;
-    outline: none !important;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif !important;    font-size: 14px !important;    font-weight: 500 !important;    text-align: center !important;    padding: 8px 12px !important;    border: 1px solid !important;    border-radius: 8px !important;    background: #fff !important;    color: #333 !important;    transition: all 0.3s ease !important;    width: 100% !important;    box-sizing: border-box !important;    outline: none !important;    height: 42px;
 }
-
+.select2-container--default[dir=rtl] .select2-selection--multiple .select2-search--inline{	    width: 100%;    margin-top: 20px;}
 .select2-search__field:focus {
     outline: none !important;
-    background: transparent !important;
+    /*background: transparent !important;*/
 }
 
 .select2-search__field::placeholder {
@@ -667,43 +655,43 @@ html, body {
         margin: 0;
         width: 100%;
     }
-    
+
     .tab-content {
         padding: 5px;
     }
-    
+
     .category-search-container {
         margin-left: 0;
         margin-right: 0;
         border-radius: 0;
         padding: 10px;
     }
-    
+
     .select2-container--default .select2-selection--multiple {
         min-height: 45px !important;
     }
-    
+
     .categories {
         padding-left: 5px;
         padding-right: 5px;
     }
-    
+
     .categories button {
         font-size: 13px;
         padding: 8px 6px;
         margin: 1px;
         max-width: calc(50% - 2px);
     }
-    
+
     .bottom-nav {
         padding: 0;
     }
-    
+
     .bottom-nav button {
         padding: 12px 8px;
         font-size: 14px;
     }
-    
+
     .order-summary, .product-row {
         margin-left: 0;
         margin-right: 0;
@@ -1127,4 +1115,4 @@ html, body {
 
 #orders-container{
     padding:0 !important;
-}
+}.select2-selection__clear{	display:none!important}
