@@ -273,13 +273,6 @@ html, body {
     transform: translateY(-2px);
 }
 
-.notice{
-    display:none
-}
-
-#wpadminbar{
-    display:none
-}
 
 .product-row {
     background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);

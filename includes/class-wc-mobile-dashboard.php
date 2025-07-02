@@ -13,7 +13,14 @@ class WC_Mobile_Dashboard {
         add_action('wp_ajax_load_more_orders', [ $this, 'load_more_orders' ]);
         add_action('admin_init', [ $this, 'add_role_redirect' ]);
         add_action('admin_head', function () {
-            echo '<style>#wpadminbar,.notice { display: none !important; }</style>';
+            echo '<style>
+        @media (max-width: 768px) {
+            #wpadminbar,
+            .notice {
+                display: none !important;
+            }
+        }
+    </style>';
         });
 
     }
