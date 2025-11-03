@@ -933,3 +933,241 @@ html, body {
         max-width:100% !important;
     }
 }
+
+/* Price Edit Modal */
+.price-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.price-modal.hidden {
+    display: none;
+}
+
+.price-modal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+}
+
+.price-modal-content {
+    position: relative;
+    background: #ffffff;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    z-index: 10001;
+}
+
+.price-modal-header {
+    padding: 20px;
+    border-bottom: 1px solid #e0e0e0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.price-modal-header h2 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+}
+
+.price-modal-close {
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: #666;
+    cursor: pointer;
+    padding: 0;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+
+.price-modal-close:hover {
+    background: #f0f0f0;
+    color: #333;
+}
+
+.price-modal-body {
+    padding: 20px;
+    overflow-y: auto;
+    flex: 1;
+}
+
+.price-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    gap: 16px;
+}
+
+.price-loading.hidden {
+    display: none !important;
+}
+
+.spinner-small {
+    width: 32px;
+    height: 32px;
+    border: 3px solid #e0e0e0;
+    border-top: 3px solid #007cba;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.price-edit-field {
+    margin-bottom: 20px;
+}
+
+.price-edit-field label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    color: #333;
+}
+
+.price-edit-field input[type="number"] {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 15px;
+    background: #ffffff;
+    color: #333;
+    transition: all 0.2s ease;
+}
+
+.price-edit-field input[type="number"]:focus {
+    outline: none;
+    border-color: #007cba;
+    box-shadow: 0 0 0 3px rgba(0, 124, 186, 0.1);
+}
+
+.variation-price-item {
+    background: #f8f9fa;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 12px;
+}
+
+.variation-price-item h4 {
+    margin: 0 0 12px 0;
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+}
+
+.variation-price-fields {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.price-modal-footer {
+    padding: 20px;
+    border-top: 1px solid #e0e0e0;
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+}
+
+.save-price-btn {
+    background: #007cba;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.save-price-btn:hover {
+    background: #005a87;
+    transform: translateY(-1px);
+}
+
+.save-price-btn:active {
+    transform: translateY(0);
+}
+
+.cancel-price-btn {
+    background: #f8f9fa;
+    color: #333;
+    border: 1px solid #e0e0e0;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.cancel-price-btn:hover {
+    background: #e9ecef;
+    border-color: #d0d0d0;
+}
+
+/* Make product-row clickable but not the switch */
+.product-row {
+    cursor: pointer;
+}
+
+.product-row .switch {
+    cursor: pointer;
+    pointer-events: auto;
+    position: relative;
+    z-index: 10;
+}
+
+.product-row .switch input {
+    pointer-events: auto;
+    position: relative;
+    z-index: 11;
+}
+
+.product-row .switch .slider {
+    position: absolute;
+    z-index: 12;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+.product-row .switch .slider:before {
+    position: absolute;
+    z-index: 13;
+    opacity: 1 !important;
+    visibility: visible !important;
+}

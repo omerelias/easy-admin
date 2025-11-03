@@ -115,3 +115,27 @@
     </div>
 </div>
 
+<!-- Modal for Price Editing -->
+<div id="price-edit-modal" class="price-modal hidden">
+    <div class="price-modal-overlay"></div>
+    <div class="price-modal-content">
+        <div class="price-modal-header">
+            <h2 id="price-modal-title">עריכת מחיר</h2>
+            <button class="price-modal-close">&times;</button>
+        </div>
+        <div class="price-modal-body">
+            <div id="price-edit-loading" class="price-loading hidden">
+                <div class="spinner-small"></div>
+                <span>טוען...</span>
+            </div>
+            <div id="price-edit-content">
+                <!-- Content will be loaded dynamically -->
+            </div>
+        </div>
+        <div class="price-modal-footer">
+            <button id="save-price-btn" class="save-price-btn">שמור מחיר</button>
+            <button class="cancel-price-btn" id="cancel-price-btn">ביטול</button>
+        </div>
+    </div>
+</div>
+

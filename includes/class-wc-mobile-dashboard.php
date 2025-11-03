@@ -11,6 +11,8 @@ class WC_Mobile_Dashboard {
         add_action('wp_ajax_search_products_by_name', [ $this, 'search_products_by_name' ]);
         add_action('wp_ajax_search_orders', [ $this, 'search_orders' ]);
         add_action('wp_ajax_load_more_orders', [ $this, 'load_more_orders' ]);
+        add_action('wp_ajax_get_product_prices', [ $this, 'get_product_prices' ]);
+        add_action('wp_ajax_update_product_price', [ $this, 'update_product_price' ]);
         add_action('admin_init', [ $this, 'add_role_redirect' ]);
         add_action('admin_head', function () {
             echo '<style>
@@ -138,7 +140,8 @@ class WC_Mobile_Dashboard {
         ]);
 
         foreach ($products as $product) {
-            echo '<div class="product-row">';
+            $product_type = $product->get_type();
+            echo '<div class="product-row" data-product-id="' . $product->get_id() . '" data-product-type="' . $product_type . '">';
             echo '<img src="' . get_the_post_thumbnail_url($product->get_id(), 'thumbnail') . '" />';
             echo '<span>' . esc_html($product->get_name()) . '</span>';
             echo '<label class="switch">';
@@ -190,7 +193,8 @@ class WC_Mobile_Dashboard {
             echo '<div class="no-products">לא נמצאו מוצרים</div>';
         } else {
             foreach ($products as $product) {
-                echo '<div class="product-row">';
+                $product_type = $product->get_type();
+                echo '<div class="product-row" data-product-id="' . $product->get_id() . '" data-product-type="' . $product_type . '">';
                 echo '<img src="' . get_the_post_thumbnail_url($product->get_id(), 'thumbnail') . '" />';
                 echo '<span>' . esc_html($product->get_name()) . '</span>';
                 echo '<label class="switch">';
@@ -377,6 +381,124 @@ class WC_Mobile_Dashboard {
         }
         echo '</div>';
         echo '</div>';
+    }
+
+    public function get_product_prices() {
+        check_ajax_referer('toggle_stock', 'nonce');
+        
+        $product_id = intval($_POST['product_id']);
+        $product = wc_get_product($product_id);
+        
+        if (!$product) {
+            wp_send_json_error('מוצר לא נמצא');
+            return;
+        }
+        
+        $data = [
+            'product_id' => $product_id,
+            'product_name' => $product->get_name(),
+            'product_type' => $product->get_type(),
+            'regular_price' => $product->get_regular_price(),
+            'sale_price' => $product->get_sale_price(),
+            'variations' => []
+        ];
+        
+        // אם זה מוצר וריאציה - טען את כל הוריאציות
+        if ($product->is_type('variable')) {
+            $variation_ids = $product->get_children();
+            foreach ($variation_ids as $variation_id) {
+                $variation = wc_get_product($variation_id);
+                if (!$variation) continue;
+                $variation_data = [
+                    'variation_id' => $variation->get_id(),
+                    'attributes' => [],
+                    'regular_price' => $variation->get_regular_price(),
+                    'sale_price' => $variation->get_sale_price(),
+                    'formatted_name' => ''
+                ];
+                
+                // קבלת שמות הוריאציות
+                $attributes = $variation->get_variation_attributes(false);
+                $attr_names = [];
+                foreach ($attributes as $key => $value) {
+                    $attr_key = str_replace('attribute_', '', $key);
+                    $attr_name = wc_attribute_label($attr_key, $product);
+                    
+                    // קבלת הערך הנכון - ננסה לקבל דרך taxonomy term
+                    $taxonomy = 'pa_' . $attr_key;
+                    $decoded_value = $value;
+                    
+                    if (taxonomy_exists($taxonomy)) {
+                        // ננסה עם slug המקורי
+                        $term = get_term_by('slug', $value, $taxonomy);
+                        
+                        // אם לא מצאנו, ננסה עם URL decoded slug
+                        if (!$term || is_wp_error($term)) {
+                            $decoded_slug = rawurldecode($value);
+                            $term = get_term_by('slug', $decoded_slug, $taxonomy);
+                        }
+                        
+                        if ($term && !is_wp_error($term)) {
+                            $decoded_value = $term->name;
+                        } else {
+                            // פענוח URL encoding
+                            $decoded_value = rawurldecode($value);
+                        }
+                    } else {
+                        // אם זה לא taxonomy, פענח URL encoding
+                        $decoded_value = rawurldecode($value);
+                    }
+                    
+                    // החלפת מקפים ברווחים
+                    $decoded_value = str_replace('-', ' ', $decoded_value);
+                    
+                    $attr_names[] = $attr_name . ': ' . $decoded_value;
+                }
+                $variation_data['attributes'] = $attr_names;
+                $variation_data['formatted_name'] = implode(', ', $attr_names);
+                
+                $data['variations'][] = $variation_data;
+            }
+        }
+        
+        wp_send_json_success($data);
+    }
+    
+    public function update_product_price() {
+        check_ajax_referer('toggle_stock', 'nonce');
+        
+        $product_id = intval($_POST['product_id']);
+        $variation_id = isset($_POST['variation_id']) ? intval($_POST['variation_id']) : 0;
+        $regular_price = isset($_POST['regular_price']) ? sanitize_text_field($_POST['regular_price']) : '';
+        $sale_price = isset($_POST['sale_price']) ? sanitize_text_field($_POST['sale_price']) : '';
+        
+        // אם יש variation_id - זה וריאציה
+        if ($variation_id > 0) {
+            $product = wc_get_product($variation_id);
+        } else {
+            $product = wc_get_product($product_id);
+        }
+        
+        if (!$product) {
+            wp_send_json_error('מוצר לא נמצא');
+            return;
+        }
+        
+        // עדכון מחירים
+        if ($regular_price !== '') {
+            $product->set_regular_price($regular_price);
+        }
+        
+        if ($sale_price !== '') {
+            $product->set_sale_price($sale_price);
+        } else {
+            // אם לא נשלח sale_price, נסיר אותו
+            $product->set_sale_price('');
+        }
+        
+        $product->save();
+        
+        wp_send_json_success('מחיר עודכן בהצלחה');
     }
 
     public function add_viewport_meta() {

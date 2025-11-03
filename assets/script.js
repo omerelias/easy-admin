@@ -225,7 +225,8 @@ jQuery(function($){
     });
 
     // החלפת מצב מלאי
-    $(document).on('change', '.stock-toggle', function(){
+    $(document).on('change', '.stock-toggle', function(e){
+        e.stopPropagation(); // Prevent triggering row click
         const productId = $(this).data('product-id');
         const inStock = $(this).is(':checked');
 
@@ -235,5 +236,255 @@ jQuery(function($){
             in_stock: inStock,
             nonce: wcMobileDashboard.nonce
         });
+    });
+
+    // Price Edit Modal Functions
+    let currentProductId = 0;
+    let currentProductData = null;
+
+    // פתיחת חלון עריכת מחיר
+    $(document).on('click', '.product-row', function(e){
+        // Prevent click if clicking on switch
+        if ($(e.target).closest('.switch').length) {
+            return;
+        }
+        
+        currentProductId = $(this).data('product-id');
+        openPriceModal(currentProductId);
+    });
+
+    // סגירת חלון
+    $('.price-modal-close, .cancel-price-btn, .price-modal-overlay').on('click', function(e){
+        if ($(e.target).hasClass('price-modal-overlay') || $(e.target).hasClass('price-modal-close') || $(e.target).hasClass('cancel-price-btn')) {
+            closePriceModal();
+        }
+    });
+
+    function openPriceModal(productId) {
+        $('#price-edit-modal').removeClass('hidden');
+        $('#price-edit-content').html('');
+        $('#price-edit-loading').removeClass('hidden').show();
+        $('#price-modal-title').text('טוען...');
+
+        // טעינת נתוני מוצר
+        $.post(wcMobileDashboard.ajax_url, {
+            action: 'get_product_prices',
+            product_id: productId,
+            nonce: wcMobileDashboard.nonce
+        }).then(function(response) {
+            // הסתרת loading בהכרח
+            $('#price-edit-loading').addClass('hidden').hide();
+            
+            if (response && response.success) {
+                currentProductData = response.data;
+                renderPriceEditForm(response.data);
+            } else {
+                $('#price-edit-content').html('<div class="error">שגיאה בטעינת נתוני המוצר</div>');
+            }
+        }).catch(function(error) {
+            // הסתרת loading גם במקרה של שגיאה
+            $('#price-edit-loading').addClass('hidden').hide();
+            $('#price-edit-content').html('<div class="error">שגיאה בטעינת נתוני המוצר</div>');
+            console.error('Error loading product prices:', error);
+        });
+    }
+
+    function closePriceModal() {
+        $('#price-edit-modal').addClass('hidden');
+        $('#price-edit-loading').addClass('hidden').hide();
+        $('#price-edit-content').html('');
+        currentProductId = 0;
+        currentProductData = null;
+    }
+
+    function renderPriceEditForm(data) {
+        $('#price-modal-title').text('עריכת מחיר: ' + data.product_name);
+        
+        let html = '';
+        
+        if (data.product_type === 'variable' && data.variations.length > 0) {
+            // מצב בחירה: וריאציות / גורף
+            html += '<div class="price-edit-mode" style="margin-bottom:16px;">';
+            html += '  <label><input type="radio" name="price-edit-mode" value="variation" checked> שינוי לפי וריאציה</label>';
+            html += '  <label style="margin-inline-start:16px;"><input type="radio" name="price-edit-mode" value="bulk"> שינוי לכל הוריאציות</label>';
+            html += '</div>';
+            
+            // קונטיינר גורף
+            html += '<div id="bulk-price-container" class="hidden">';
+            html += '  <div class="price-edit-field">';
+            html += '    <label>מחיר רגיל (גורף):</label>';
+            html += '    <input type="number" step="0.01" id="bulk-regular-price" placeholder="השאר ריק כדי לא לשנות">';
+            html += '  </div>';
+            html += '  <div class="price-edit-field">';
+            html += '    <label>מחיר מבצע (גורף):</label>';
+            html += '    <input type="number" step="0.01" id="bulk-sale-price" placeholder="השאר ריק כדי למחוק או לא לשנות">';
+            html += '  </div>';
+            html += '  <div style="font-size:12px;color:#666;">הערה: אם תשאיר שדה ריק, המחיר לא ישתנה (מחיר מבצע ריק ימחק מבצע קיים).</div>';
+            html += '</div>';
+            
+            // קונטיינר לפי וריאציה
+            html += '<div id="per-variation-container">';
+            data.variations.forEach(function(variation) {
+                html += '<div class="variation-price-item" data-variation-id="' + variation.variation_id + '">';
+                html += '<h4>' + (variation.formatted_name || 'וריאציה #' + variation.variation_id) + '</h4>';
+                html += '<div class="variation-price-fields">';
+                html += '<div class="price-edit-field">';
+                html += '<label>מחיר רגיל:</label>';
+                html += '<input type="number" step="0.01" class="variation-regular-price" value="' + (variation.regular_price || '') + '" data-variation-id="' + variation.variation_id + '">';
+                html += '</div>';
+                html += '<div class="price-edit-field">';
+                html += '<label>מחיר מבצע:</label>';
+                html += '<input type="number" step="0.01" class="variation-sale-price" value="' + (variation.sale_price || '') + '" data-variation-id="' + variation.variation_id + '">';
+                html += '</div>';
+                html += '</div>';
+                html += '</div>';
+            });
+            html += '</div>';
+        } else {
+            // מוצר רגיל
+            html += '<div class="price-edit-field">';
+            html += '<label>מחיר רגיל:</label>';
+            html += '<input type="number" step="0.01" id="regular-price" value="' + (data.regular_price || '') + '">';
+            html += '</div>';
+            html += '<div class="price-edit-field">';
+            html += '<label>מחיר מבצע:</label>';
+            html += '<input type="number" step="0.01" id="sale-price" value="' + (data.sale_price || '') + '">';
+            html += '</div>';
+        }
+        
+        $('#price-edit-content').html(html);
+        
+        // האזנה למצב עריכה
+        $('input[name="price-edit-mode"]').on('change', function(){
+            const mode = $('input[name="price-edit-mode"]:checked').val();
+            if (mode === 'bulk') {
+                $('#bulk-price-container').removeClass('hidden');
+                $('#per-variation-container').addClass('hidden');
+            } else {
+                $('#per-variation-container').removeClass('hidden');
+                $('#bulk-price-container').addClass('hidden');
+            }
+        });
+    }
+
+    // שמירת מחירים
+    $('#save-price-btn').on('click', function() {
+        if (!currentProductData) return;
+
+        const isVariable = currentProductData.product_type === 'variable';
+        const mode = $('input[name="price-edit-mode"]:checked').val() || 'variation';
+        const updates = [];
+
+        if (isVariable && mode === 'bulk') {
+            // עדכון גורף לכל הוריאציות
+            const bulkRegular = $('#bulk-regular-price').val();
+            const bulkSale = $('#bulk-sale-price').val();
+            
+            currentProductData.variations.forEach(function(variation){
+                updates.push({
+                    variation_id: variation.variation_id,
+                    regular_price: bulkRegular,
+                    sale_price: bulkSale
+                });
+            });
+
+            let saveIndex = 0;
+            function saveNextVariation() {
+                if (saveIndex >= updates.length) {
+                    alert('מחירים עודכנו בהצלחה!');
+                    closePriceModal();
+                    performSearch();
+                    return;
+                }
+                const update = updates[saveIndex];
+                $.post(wcMobileDashboard.ajax_url, {
+                    action: 'update_product_price',
+                    product_id: currentProductId,
+                    variation_id: update.variation_id,
+                    regular_price: update.regular_price,
+                    sale_price: update.sale_price,
+                    nonce: wcMobileDashboard.nonce
+                }).then(function(response) {
+                    if (response.success) {
+                        saveIndex++;
+                        saveNextVariation();
+                    } else {
+                        alert('שגיאה בעדכון מחיר: ' + (response.data || 'שגיאה לא ידועה'));
+                    }
+                }).catch(function() {
+                    alert('שגיאה בעדכון מחיר');
+                });
+            }
+            saveNextVariation();
+            return;
+        }
+
+        if (isVariable) {
+            // שמירה פר וריאציה
+            $('.variation-price-item').each(function() {
+                const variationId = $(this).data('variation-id');
+                const regularPrice = $(this).find('.variation-regular-price').val();
+                const salePrice = $(this).find('.variation-sale-price').val();
+                
+                updates.push({
+                    variation_id: variationId,
+                    regular_price: regularPrice,
+                    sale_price: salePrice
+                });
+            });
+
+            let saveIndex = 0;
+            function saveNextVariation() {
+                if (saveIndex >= updates.length) {
+                    alert('מחירים עודכנו בהצלחה!');
+                    closePriceModal();
+                    performSearch();
+                    return;
+                }
+
+                const update = updates[saveIndex];
+                $.post(wcMobileDashboard.ajax_url, {
+                    action: 'update_product_price',
+                    product_id: currentProductId,
+                    variation_id: update.variation_id,
+                    regular_price: update.regular_price,
+                    sale_price: update.sale_price,
+                    nonce: wcMobileDashboard.nonce
+                }).then(function(response) {
+                    if (response.success) {
+                        saveIndex++;
+                        saveNextVariation();
+                    } else {
+                        alert('שגיאה בעדכון מחיר: ' + (response.data || 'שגיאה לא ידועה'));
+                    }
+                }).catch(function() {
+                    alert('שגיאה בעדכון מחיר');
+                });
+            }
+
+            saveNextVariation();
+        } else {
+            // שמירת מוצר רגיל
+            const regularPrice = $('#regular-price').val();
+            const salePrice = $('#sale-price').val();
+
+            $.post(wcMobileDashboard.ajax_url, {
+                action: 'update_product_price',
+                product_id: currentProductId,
+                regular_price: regularPrice,
+                sale_price: salePrice,
+                nonce: wcMobileDashboard.nonce
+            }).then(function(response) {
+                if (response.success) {
+                    alert('מחיר עודכן בהצלחה!');
+                    closePriceModal();
+                    performSearch();
+                } else {
+                    alert('שגיאה בעדכון מחיר: ' + (response.data || 'שגיאה לא ידועה'));
+                }
+            }).catch(function() {
+                alert('שגיאה בעדכון מחיר');
+            });
+        }
     });
 });
