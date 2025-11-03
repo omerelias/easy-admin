@@ -23,14 +23,20 @@ jQuery(function($){
         });
         
         // כשבוחרים בselect
-        $('#category-select').on('change', function() {
+        $('#category-select').on('change', function () {
             const selected = $(this).val() || [];
             selectedCategories.clear();
             selected.forEach(id => selectedCategories.add(parseInt(id)));
-            
+
             updateButtonStates();
             performSearch();
+
+            // הורדת פוקוס משדה החיפוש של Select2
+            setTimeout(() => {
+                $('.select2-search__field').blur();
+            }, 0);
         });
+
     }
     
     // עדכון מצב הכפתורים

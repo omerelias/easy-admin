@@ -1,4 +1,4 @@
-/* איפוס כללי ומניעת גלילה אופקית */
+/* Reset and Base Styles */
 * {
     box-sizing: border-box;
 }
@@ -6,21 +6,24 @@
 html, body {
     overflow-x: hidden;
     max-width: 100%;
-}
+} 
 
 .mobile-dashboard {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    padding-bottom: 80px; /* מקום לכפתורים התחתונים */
-    padding-top: 10px;
+    padding-bottom: 80px;
+    padding-top: 20px;
     max-width: 100%;
     margin: auto;
     overflow-x: hidden;
     width: 100%;
+    background: #fafafa;
+    color: #333;
 }
 
 .tab-content {
-    padding: 10px;
-    max-width: 100%;
+    padding: 20px;
+    max-width: 50%;
+    margin: 0 auto;
     overflow-x: hidden;
 }
 
@@ -28,23 +31,25 @@ html, body {
     display: none;
 }
 
+/* Order Summary Cards */
 .order-summary {
-    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-    border: none;
+    background: #ffffff;
+    border: 1px solid #e0e0e0;
     border-radius: 12px;
-    margin-bottom: 15px;
-    padding: 15px;
-    box-shadow: 0 4px 15px rgba(252, 182, 159, 0.2);
+    margin-bottom: 16px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
     max-width: 100%;
     overflow-x: hidden;
     position: relative;
     color: #333;
-    transition: all 0.3s ease;
+    transition: all 0.2s ease;
 }
 
 .order-summary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(252, 182, 159, 0.3);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    border-color: #d0d0d0;
 }
 
 .order-summary strong {
@@ -53,63 +58,42 @@ html, body {
     font-size: 16px;
     font-weight: 600;
     color: #333;
-    text-shadow: none;
 }
 
 .order-summary .toggle-order-details {
-    background: linear-gradient(45deg, #667eea, #764ba2);
+    background: #007cba;
     color: white;
     border: none;
-    padding: 8px 16px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 600;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
     cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+    transition: all 0.2s ease;
     float: left;
-    margin-top: 5px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    position: relative;
-    overflow: hidden;
-}
-
-.order-summary .toggle-order-details::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-    transition: left 0.5s;
-}
-
-.order-summary .toggle-order-details:hover::before {
-    left: 100%;
+    margin-top: 8px;
+    text-transform: none;
+    letter-spacing: 0.3px;
 }
 
 .order-summary .toggle-order-details:hover {
-    background: linear-gradient(45deg, #764ba2, #667eea);
-    transform: scale(1.05);
-    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    background: #005a87;
+    transform: translateY(-1px);
 }
 
 .order-summary .toggle-order-details:active {
-    transform: scale(0.95);
+    transform: translateY(0);
 }
 
 .order-details {
-    margin-top: 15px;
-    padding: 12px;
-    border-top: 1px solid rgba(0,0,0,0.1);
+    margin-top: 16px;
+    padding: 16px;
+    border-top: 1px solid #f0f0f0;
     font-size: 14px;
-    background: rgba(0,0,0,0.05);
+    background: #fafafa;
     border-radius: 8px;
-    backdrop-filter: blur(10px);
-    color: #333;
-    transition: all 0.3s ease;
+    color: #666;
+    transition: all 0.2s ease;
     opacity: 1;
     max-height: 500px;
     overflow: hidden;
@@ -124,8 +108,8 @@ html, body {
 }
 
 .order-details div {
-    padding: 4px 0;
-    border-bottom: 1px solid rgba(0,0,0,0.1);
+    padding: 6px 0;
+    border-bottom: 1px solid #f0f0f0;
     transition: all 0.2s ease;
 }
 
@@ -133,7 +117,7 @@ html, body {
     border-bottom: none;
 }
 
-/* כפתורים תחתונים - STICKY */
+/* Bottom Navigation */
 .bottom-nav {
     position: fixed;
     bottom: 0;
@@ -142,10 +126,10 @@ html, body {
     width: 100%;
     display: flex;
     justify-content: space-around;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    border-top: none;
+    background: #ffffff;
+    border-top: 1px solid #e0e0e0;
     z-index: 9999;
-    box-shadow: 0 -4px 20px rgba(102, 126, 234, 0.3);
+    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.06);
     padding: 0;
     margin: 0;
 }
@@ -153,60 +137,44 @@ html, body {
 .bottom-nav button {
     flex: 1;
     padding: 16px 12px;
-    font-size: 16px;
+    font-size: 15px;
     border: none;
     background: transparent;
-    font-weight: 600;
+    font-weight: 500;
     max-width: 50%;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    color: rgba(255, 255, 255, 0.8);
-    transition: all 0.3s ease;
+    color: #666;
+    transition: all 0.2s ease;
     position: relative;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.bottom-nav button::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
-    opacity: 0;
-    transition: opacity 0.3s ease;
+    text-transform: none;
+    letter-spacing: 0.3px;
 }
 
 .bottom-nav button:hover {
-    color: #ffffff;
-    transform: translateY(-2px);
-}
-
-.bottom-nav button:hover::before {
-    opacity: 1;
+    color: #007cba;
+    background: #f8f9fa;
 }
 
 .bottom-nav button:active {
     transform: translateY(0);
 }
 
-/* כפתור פעיל */
 .bottom-nav button.active {
-    background: rgba(255, 255, 255, 0.15);
-    color: #ffffff;
-    box-shadow: inset 0 2px 10px rgba(0,0,0,0.1);
+    background: #f0f7ff;
+    color: #007cba;
+    border-bottom: 2px solid #007cba;
 }
 
-.categories{
+/* Category Buttons */
+.categories {
     -webkit-overflow-scrolling: touch;
     overflow-scrolling: touch;
     overflow: auto !important;
     white-space: nowrap;
     display: block !important;
-    padding-right: 10px;
+    padding: 20px 10px;
     opacity: 1 !important;
     padding-bottom: 30px;
     padding-left: 10px;
@@ -223,130 +191,97 @@ html, body {
     vertical-align: top;
     white-space: normal;
     flex: 1 1 45%;
-    border-radius: 12px;
-    border: none;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+    background: #ffffff;
     font-size: 14px;
-    font-weight: 600;
+    font-weight: 500;
     cursor: pointer;
     margin: 4px;
     box-sizing: border-box;
     max-width: calc(50% - 8px);
-    color: white;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.2);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+    color: #333;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+    text-transform: none;
+    letter-spacing: 0.3px;
     position: relative;
     overflow: hidden;
 }
 
-.categories button::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-    transition: left 0.5s;
-}
-
-.categories button:hover::before {
-    left: 100%;
-}
-
 .categories button:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+    transform: translateY(-1px);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+    border-color: #007cba;
 }
 
 .categories button:active {
-    transform: translateY(-1px);
+    transform: translateY(0);
 }
 
-/* כפתורים פעילים */
 .categories button.active {
-    background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%) !important;
+    background: #007cba !important;
     color: white !important;
-    box-shadow: 0 6px 20px rgba(17, 153, 142, 0.4) !important;
-    transform: translateY(-2px);
+    border-color: #007cba !important;
+    box-shadow: 0 3px 8px rgba(0, 124, 186, 0.3) !important;
 }
 
-
+/* Product Rows */
 .product-row {
-    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-    border: 2px solid #e0e0e0;
+    background: #ffffff;
+    border: 1px solid #e0e0e0;
     border-radius: 12px;
     margin-bottom: 12px;
-    padding: 15px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    padding: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
     max-width: 100%;
     overflow-x: hidden;
-    transition: all 0.3s ease;
+    transition: all 0.2s ease;
     display: grid;
     grid-template-columns: 50px 1fr auto;
     align-items: center;
-    gap: 12px;
+    gap: 16px;
     position: relative;
 }
 
-.product-row::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
-    border-radius: 12px;
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
 .product-row:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-    border-color: #667eea;
-}
-
-.product-row:hover::before {
-    opacity: 1;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    border-color: #d0d0d0;
 }
 
 .product-row img {
     width: 50px;
     height: 50px;
     object-fit: contain;
-    border: 2px solid #e0e0e0;
-    border-radius: 10px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
     background: #fff;
     flex-shrink: 0;
-    transition: all 0.3s ease;
+    transition: all 0.2s ease;
     position: relative;
     z-index: 1;
 }
 
 .product-row:hover img {
-    border-color: #667eea;
-    transform: scale(1.05);
+    border-color: #007cba;
 }
 
 .product-row span {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    font-weight: 600;
+    font-weight: 500;
     color: #333;
     position: relative;
     z-index: 1;
 }
 
+/* Toggle Switch */
 .product-row .switch {
     position: relative;
     display: inline-block;
-    width: 45px;
+    width: 44px;
     height: 24px;
     flex-shrink: 0;
     position: relative;
@@ -363,10 +298,10 @@ html, body {
     position: absolute;
     cursor: pointer;
     top: 0; left: 0; right: 0; bottom: 0;
-    background: linear-gradient(135deg, #ccc 0%, #bbb 100%);
-    transition: .4s;
+    background: #e0e0e0;
+    transition: .2s;
     border-radius: 24px;
-    box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .product-row .slider:before {
@@ -376,60 +311,47 @@ html, body {
     width: 18px;
     left: 3px;
     bottom: 3px;
-    background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
-    transition: .4s;
+    background: #ffffff;
+    transition: .2s;
     border-radius: 50%;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
 .product-row input:checked + .slider {
-    background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
-    box-shadow: inset 0 2px 4px rgba(0,0,0,0.1), 0 0 0 2px rgba(17, 153, 142, 0.2);
+    background: #007cba;
 }
 
 .product-row input:checked + .slider:before {
-    transform: translateX(21px);
-    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    transform: translateX(20px);
 }
 
-/* עיצוב Select2 */
+/* Category Search Container */
 .category-search-container {
     margin-bottom: 20px;
-    background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+    background: #ffffff;
     padding: 20px;
-    border-radius: 16px;
-    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.2);
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
     max-width: 100%;
     overflow: hidden;
     position: relative;
-    color: white;
-}
-
-.category-search-container::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
-    border-radius: 16px;
-    pointer-events: none;
+    color: #333;
+    border: 1px solid #e0e0e0;
 }
 
 .category-search-container label {
     display: block;
     margin-bottom: 12px;
-    font-weight: 700;
-    font-size: 16px;
-    color: #ffffff;
-    text-shadow: 0 1px 2px rgba(0,0,0,0.1);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+    font-weight: 600;
+    font-size: 15px;
+    color: #333;
+    text-transform: none;
+    letter-spacing: 0.3px;
     position: relative;
     z-index: 1;
 }
 
+/* Select2 Styling */
 .select2-container {
     width: 100% !important;
     max-width: 100% !important;
@@ -438,297 +360,117 @@ html, body {
 }
 
 .select2-container--default .select2-selection--multiple {
-    border: 2px solid rgba(255,255,255,0.3) !important;
-    border-radius: 12px !important;
-    min-height: 50px !important;
+    border: 1px solid #e0e0e0 !important;
+    border-radius: 8px !important;
+    min-height: 48px !important;
     padding: 8px !important;
     width: 100% !important;
     max-width: 100% !important;
-    background: rgba(255,255,255,0.1) !important;
-    backdrop-filter: blur(10px);
-    transition: all 0.3s ease;
+    background: #ffffff !important;
+    transition: all 0.2s ease;
 }
 
 .select2-container--default .select2-selection--multiple:focus {
-    border-color: rgba(255,255,255,0.6) !important;
-    box-shadow: 0 0 0 3px rgba(255,255,255,0.1) !important;
+    border-color: #007cba !important;
+    box-shadow: 0 0 0 3px rgba(0, 124, 186, 0.1) !important;
 }
 
 .select2-container--default .select2-selection--multiple .select2-selection__choice {
-    background: linear-gradient(45deg, #ff6b6b, #ee5a24) !important;
+    background: #007cba !important;
     border: none !important;
     color: white !important;
-    border-radius: 20px !important;
-    padding: 4px 12px !important;
+    border-radius: 6px !important;
+    padding: 4px 8px !important;
     margin: 2px !important;
     max-width: calc(100% - 10px);
     overflow: hidden;
     text-overflow: ellipsis;
-    font-weight: 600;
-    box-shadow: 0 2px 8px rgba(255, 107, 107, 0.3);
+    font-weight: 500;
+    font-size: 13px;
 }
 
 .select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
-    color: white !important;
-    margin-left: 8px !important;
+    color: rgba(255, 255, 255, 0.8) !important;
+    margin-left: 6px !important;
     font-weight: bold;
     border-radius: 50%;
-    width: 18px;
-    height: 18px;
+    width: 16px;
+    height: 16px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.2s ease;	color: #000 !important;
+    transition: all 0.2s ease;
 }
 
 .select2-container--default .select2-selection--multiple .select2-selection__choice__remove:hover {
-    background: rgba(255,255,255,0.2);
-    transform: scale(1.1);
+    background: rgba(255, 255, 255, 0.2);
+    color: white !important;
 }
 
 .select2-dropdown {
-    border: 2px solid rgba(102, 126, 234, 0.3) !important;
-    border-radius: 12px !important;
-    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.2) !important;
+    border: 1px solid #e0e0e0 !important;
+    border-radius: 8px !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1) !important;
     max-width: 100% !important;
     background: white;
     overflow: hidden;
 }
 
 .select2-container--default .select2-results__option--highlighted[aria-selected] {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+    background: #007cba !important;
     color: white !important;
 }
 
-/* עיצוב שדה החיפוש של Select2 */
 .select2-search__field {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif !important;    font-size: 14px !important;    font-weight: 500 !important;    text-align: center !important;    padding: 8px 12px !important;    border: 1px solid !important;    border-radius: 8px !important;    background: #fff !important;    color: #333 !important;    transition: all 0.3s ease !important;    width: 100% !important;    box-sizing: border-box !important;    outline: none !important;    height: 42px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif !important;
+    font-size: 14px !important;
+    font-weight: 400 !important;
+    text-align: right !important;
+    padding: 8px 12px !important;
+    border: 1px solid #e0e0e0 !important;
+    border-radius: 6px !important;
+    background: #ffffff !important;
+    color: #333 !important;
+    transition: all 0.2s ease !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    outline: none !important;
+    height: 40px;
 }
-.select2-container--default[dir=rtl] .select2-selection--multiple .select2-search--inline{	    width: 100%;    margin-top: 20px;}
+
 .select2-search__field:focus {
     outline: none !important;
-    /*background: transparent !important;*/
+    border-color: #007cba !important;
+    box-shadow: 0 0 0 3px rgba(0, 124, 186, 0.1) !important;
 }
 
-.select2-search__field::placeholder {
-    color: #666 !important;
-    font-style: normal !important;
-    text-align: center !important;
+.select2-container--default[dir=rtl] .select2-selection--multiple .select2-search--inline {
+    width: 100%;
+    margin-top: 20px;
 }
 
-/* עיצוב קונטיינר החיפוש */
-.select2-search--dropdown {
-    padding: 15px !important;
-    background: transparent !important;
-    border-bottom: 1px solid rgba(102, 126, 234, 0.1) !important;
-}
-
-/* Loader/Spinner */
-.loader {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 50px 20px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    position: relative;
-    z-index: 100;
-    border-radius: 16px;
-    margin-bottom: 20px;
-    max-width: 100%;
-    color: white;
-    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.2);
-}
-
-.loader::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
-    border-radius: 16px;
-    pointer-events: none;
-}
-
-.spinner {
-    width: 50px;
-    height: 50px;
-    border: 4px solid rgba(255,255,255,0.3);
-    border-top: 4px solid #ffffff;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-    margin-bottom: 15px;
-    position: relative;
-    z-index: 1;
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-.loader span {
-    color: #ffffff;
-    font-size: 16px;
-    font-weight: 600;
-    position: relative;
-    z-index: 1;
-    text-shadow: 0 1px 2px rgba(0,0,0,0.1);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-/* מצבי הודעות */
-.no-selection, .no-products, .error, .no-orders {
-    text-align: center;
-    padding: 40px 20px;
-    border-radius: 16px;
-    margin: 20px 0;
-    font-size: 16px;
-    font-weight: 600;
-    max-width: 100%;
-    word-wrap: break-word;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-    position: relative;
-    overflow: hidden;
-}
-
-.no-selection::before, .no-products::before, .error::before, .no-orders::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
-    border-radius: 16px;
-    pointer-events: none;
-}
-
-.no-selection {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: #ffffff;
-    text-shadow: 0 1px 2px rgba(0,0,0,0.1);
-}
-
-.no-products {
-    background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
-    color: #333;
-}
-
-.no-orders {
-    background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
-    color: #333;
-}
-
-.error {
-    background: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%);
-    color: #ffffff;
-    text-shadow: 0 1px 2px rgba(0,0,0,0.1);
-}
-
-/* אפקט Loading למכולה */
-#products-container.loading {
-    opacity: 0.6;
-    pointer-events: none;
-}
-
-#products-container {
-    max-width: 100%;
-    overflow-x: hidden;
-}
-
-/* התאמה למובייל */
-@media (max-width: 600px) {
-    .mobile-dashboard {
-        padding-left: 5px;
-        padding-right: 5px;
-        margin: 0;
-        width: 100%;
-    }
-
-    .tab-content {
-        padding: 5px;
-    }
-
-    .category-search-container {
-        margin-left: 0;
-        margin-right: 0;
-        border-radius: 0;
-        padding: 10px;
-    }
-
-    .select2-container--default .select2-selection--multiple {
-        min-height: 45px !important;
-    }
-
-    .categories {
-        padding-left: 5px;
-        padding-right: 5px;
-    }
-
-    .categories button {
-        font-size: 13px;
-        padding: 8px 6px;
-        margin: 1px;
-        max-width: calc(50% - 2px);
-    }
-
-    .bottom-nav {
-        padding: 0;
-    }
-
-    .bottom-nav button {
-        padding: 12px 8px;
-        font-size: 14px;
-    }
-
-    .order-summary, .product-row {
-        margin-left: 0;
-        margin-right: 0;
-        border-radius: 6px;
-    }
-}
-.categories{
-    display:none !important;
-}
-
-/* עיצוב חיפוש מוצרים */
+/* Product Search Container */
 .product-search-container {
     margin-bottom: 20px;
-    background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+    background: #ffffff;
     padding: 20px;
-    border-radius: 16px;
-    box-shadow: 0 8px 25px rgba(17, 153, 142, 0.2);
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
     max-width: 100%;
     overflow: hidden;
     position: relative;
-    color: white;
-}
-
-.product-search-container::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
-    border-radius: 16px;
-    pointer-events: none;
+    color: #333;
+    border: 1px solid #e0e0e0;
 }
 
 .product-search-container label {
     display: block;
     margin-bottom: 12px;
-    font-weight: 700;
-    font-size: 16px;
-    color: #ffffff;
-    text-shadow: 0 1px 2px rgba(0,0,0,0.1);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+    font-weight: 600;
+    font-size: 15px;
+    color: #333;
+    text-transform: none;
+    letter-spacing: 0.3px;
     position: relative;
     z-index: 1;
 }
@@ -736,87 +478,68 @@ html, body {
 .product-search-container input[type="text"] {
     width: calc(100% - 60px);
     padding: 12px 16px;
-    border: 2px solid rgba(255,255,255,0.3);
-    border-radius: 12px;
-    background: rgba(255,255,255,0.1);
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    background: #ffffff;
     color: #333;
     font-size: 14px;
-    font-weight: 500;
-    transition: all 0.3s ease;
-    backdrop-filter: blur(10px);
+    font-weight: 400;
+    transition: all 0.2s ease;
     position: relative;
     z-index: 1;
 }
 
 .product-search-container input[type="text"]:focus {
     outline: none;
-    border-color: rgba(255,255,255,0.6);
-    box-shadow: 0 0 0 3px rgba(255,255,255,0.1);
-    background: rgba(255,255,255,0.95);
-}
-
-.product-search-container input[type="text"]::placeholder {
-    color: #666;
-    font-style: normal;
+    border-color: #007cba;
+    box-shadow: 0 0 0 3px rgba(0, 124, 186, 0.1);
 }
 
 .clear-search-btn {
     width: 54px;
-    height: 55px;
-    border: none;
-    background: rgba(255,255,255,0.2);
-    border-radius: 12px;
+    height: 48px;
+    border: 1px solid #e0e0e0;
+    background: #f8f9fa;
+    border-radius: 8px;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.2s ease;
     position: relative;
     z-index: 1;
     font-size: 16px;
     vertical-align: top;
+    color: #666;
 }
 
 .clear-search-btn:hover {
-    background: rgba(255,255,255,0.3);
-    transform: scale(1.05);
+    background: #e9ecef;
+    border-color: #d0d0d0;
 }
 
 .clear-search-btn:active {
-    transform: scale(0.95);
+    transform: scale(0.98);
 }
 
-/* עיצוב חיפוש הזמנות */
+/* Order Search Container */
 .order-search-container {
     margin-bottom: 20px;
-    /*background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);*/
+    background: #ffffff;
     padding: 20px;
-    border-radius: 16px;
-    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.2);
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
     max-width: 100%;
     overflow: hidden;
     position: relative;
-    background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
-    box-shadow: 0 4px 15px rgba(252, 182, 159, 0.2);
-}
-
-.order-search-container::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
-    border-radius: 16px;
-    pointer-events: none;
+    border: 1px solid #e0e0e0;
 }
 
 .order-search-container label {
     display: block;
     margin-bottom: 12px;
-    font-weight: 700;
-    font-size: 16px;
-    text-shadow: 0 1px 2px rgba(0,0,0,0.1);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+    font-weight: 600;
+    font-size: 15px;
+    color: #333;
+    text-transform: none;
+    letter-spacing: 0.3px;
     position: relative;
     z-index: 1;
 }
@@ -824,63 +547,45 @@ html, body {
 .order-search-container input[type="text"] {
     width: calc(100% - 60px);
     padding: 12px 16px;
-    border: 2px solid rgba(255,255,255,0.3);
-    border-radius: 12px;
-    background: rgba(255,255,255,0.1);
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    background: #ffffff;
     color: #333;
     font-size: 14px;
-    font-weight: 500;
-    transition: all 0.3s ease;
-    backdrop-filter: blur(10px);
+    font-weight: 400;
+    transition: all 0.2s ease;
     position: relative;
     z-index: 1;
 }
 
 .order-search-container input[type="text"]:focus {
     outline: none;
-    border-color: rgba(255,255,255,0.6);
-    box-shadow: 0 0 0 3px rgba(255,255,255,0.1);
-    background: rgba(255,255,255,0.95);
+    border-color: #007cba;
+    box-shadow: 0 0 0 3px rgba(0, 124, 186, 0.1);
 }
 
-.order-search-container input[type="text"]::placeholder {
-    color: #666;
-    font-style: normal;
-}
-
-/* עיצוב פילטר תאריכים */
+/* Date Filter Container */
 .date-filter-container {
     margin-bottom: 20px;
-    background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+    background: #ffffff;
     padding: 20px;
-    border-radius: 16px;
-    box-shadow: 0 8px 25px rgba(252, 182, 159, 0.2);
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
     max-width: 100%;
     overflow: hidden;
     position: relative;
     color: #333;
-}
-
-.date-filter-container::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
-    border-radius: 16px;
-    pointer-events: none;
+    border: 1px solid #e0e0e0;
 }
 
 .date-filter-container label {
     display: block;
     margin-bottom: 12px;
-    font-weight: 700;
-    font-size: 16px;
+    font-weight: 600;
+    font-size: 15px;
     color: #333;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+    text-transform: none;
+    letter-spacing: 0.3px;
     position: relative;
     z-index: 1;
 }
@@ -888,44 +593,43 @@ html, body {
 .date-filter-container label[for="shipping-date-from"] {
     margin-top: 20px;
     padding-top: 15px;
-    border-top: 1px solid rgba(0,0,0,0.1);
+    border-top: 1px solid #f0f0f0;
 }
 
 .date-inputs {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
     position: relative;
     z-index: 1;
 }
 
 .date-inputs input[type="date"] {
-    width:20%;
+    width: 20%;
     flex: 1;
     padding: 12px 16px;
-    border: 2px solid rgba(0,0,0,0.1);
-    border-radius: 12px;
-    background: rgba(255,255,255,0.9);
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    background: #ffffff;
     color: #333;
     font-size: 14px;
-    font-weight: 500;
-    transition: all 0.3s ease;
+    font-weight: 400;
+    transition: all 0.2s ease;
 }
 
 .date-inputs input[type="date"]:focus {
     outline: none;
-    border-color: #fcb69f;
-    box-shadow: 0 0 0 3px rgba(252, 182, 159, 0.2);
-    background: #ffffff;
+    border-color: #007cba;
+    box-shadow: 0 0 0 3px rgba(0, 124, 186, 0.1);
 }
 
 .date-separator {
-    font-weight: 600;
-    color: #333;
+    font-weight: 500;
+    color: #666;
     font-size: 14px;
 }
 
-/* כפתור טעינה נוספת */
+/* Load More Button */
 .load-more-container {
     text-align: center;
     margin: 20px 0;
@@ -933,45 +637,29 @@ html, body {
 }
 
 .load-more-btn {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: #007cba;
     color: white;
     border: none;
-    padding: 15px 30px;
-    border-radius: 25px;
-    font-size: 16px;
-    font-weight: 600;
+    padding: 14px 28px;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 500;
     cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+    transition: all 0.2s ease;
+    text-transform: none;
+    letter-spacing: 0.3px;
     position: relative;
     overflow: hidden;
-    min-width: 200px;
-}
-
-.load-more-btn::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-    transition: left 0.5s;
-}
-
-.load-more-btn:hover::before {
-    left: 100%;
+    min-width: 180px;
 }
 
 .load-more-btn:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+    background: #005a87;
+    transform: translateY(-1px);
 }
 
 .load-more-btn:active {
-    transform: translateY(-1px);
+    transform: translateY(0);
 }
 
 .load-more-btn:disabled {
@@ -980,132 +668,268 @@ html, body {
     transform: none;
 }
 
-/* הודעת אין עוד הזמנות */
-.no-more-orders {
+/* Messages */
+.no-selection, .no-products, .error, .no-orders, .no-more-orders {
     text-align: center;
-    padding: 20px;
-    color: #333;
-    font-style: italic;
-    background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+    padding: 40px 20px;
     border-radius: 12px;
     margin: 20px 0;
-    box-shadow: 0 4px 15px rgba(252, 182, 159, 0.2);
+    font-size: 15px;
+    font-weight: 500;
+    max-width: 100%;
+    word-wrap: break-word;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
     position: relative;
     overflow: hidden;
-    font-weight: 500;
+    background: #ffffff;
+    border: 1px solid #e0e0e0;
+    color: #666;
 }
 
-.no-more-orders::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
-    border-radius: 12px;
-    pointer-events: none;
+.no-selection {
+    background: #f8f9fa;
+    color: #666;
 }
 
-/* עיצוב משופר להזמנות */
+.no-products {
+    background: #f8f9fa;
+    color: #666;
+}
+
+.no-orders {
+    background: #f8f9fa;
+    color: #666;
+}
+
+.error {
+    background: #fff5f5;
+    color: #dc2626;
+    border-color: #fecaca;
+}
+
+/* Order Styling */
 .order-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
     flex-wrap: wrap;
     gap: 8px;
 }
 
 .order-header strong {
     font-size: 16px;
-    font-weight: 700;
+    font-weight: 600;
     color: #333;
-    text-shadow: none;
 }
 
 .order-date {
     font-size: 12px;
-    background: rgba(0,0,0,0.1);
+    background: #f0f0f0;
     padding: 4px 8px;
     border-radius: 6px;
     font-weight: 500;
-    color: #333;
+    color: #666;
 }
 
 .order-status {
     font-size: 11px;
-    background: rgba(0,0,0,0.15);
+    background: #f0f0f0;
     padding: 4px 8px;
     border-radius: 6px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    color: #333;
+    font-weight: 500;
+    text-transform: none;
+    letter-spacing: 0.3px;
+    color: #666;
+}
+
+/* Specific status backgrounds */
+.order-status.on-hold {
+    background: rgba(255, 193, 7, 0.2);
+    color: #856404;
+    border: 1px solid rgba(255, 193, 7, 0.3);
+}
+
+.order-status.pending {
+    background: rgba(108, 117, 125, 0.2);
+    color: #495057;
+    border: 1px solid rgba(108, 117, 125, 0.3);
+}
+
+.order-status.processing {
+    background: rgba(0, 123, 255, 0.2);
+    color: #0056b3;
+    border: 1px solid rgba(0, 123, 255, 0.3);
+}
+
+.order-status.completed {
+    background: rgba(40, 167, 69, 0.2);
+    color: #155724;
+    border: 1px solid rgba(40, 167, 69, 0.3);
+}
+
+.order-status.cancelled {
+    background: rgba(220, 53, 69, 0.2);
+    color: #721c24;
+    border: 1px solid rgba(220, 53, 69, 0.3);
+}
+
+.order-status.refunded {
+    background: rgba(255, 193, 7, 0.2);
+    color: #856404;
+    border: 1px solid rgba(255, 193, 7, 0.3);
 }
 
 .order-customer {
     font-size: 14px;
-    font-weight: 600;
+    font-weight: 500;
     margin-bottom: 8px;
     color: #333;
 }
 
 .order-total {
     font-size: 16px;
-    font-weight: 700;
+    font-weight: 600;
     margin-bottom: 8px;
     color: #333;
-    text-shadow: none;
 }
 
 .shipping-date {
     font-size: 12px;
-    background: rgba(0,0,0,0.1);
+    background: #f0f0f0;
     padding: 6px 10px;
-    border-radius: 8px;
+    border-radius: 6px;
     margin-bottom: 10px;
-    color: #333;
+    color: #666;
     font-weight: 500;
 }
 
-/* הודעות הזמנות */
-.no-orders, .no-more-orders {
-    text-align: center;
-    padding: 40px 20px;
-    border-radius: 16px;
-    margin: 20px 0;
-    font-size: 16px;
-    font-weight: 600;
-    max-width: 100%;
-    word-wrap: break-word;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-    position: relative;
-    overflow: hidden;
+/* Mobile Responsiveness */
+@media (max-width: 600px) {
+    .mobile-dashboard {
+        padding-left: 10px;
+        padding-right: 10px;
+        margin: 0;
+        width: 100%;
+    }
+
+    .tab-content {
+        padding: 15px;
+    }
+
+    .category-search-container,
+    .product-search-container,
+    .order-search-container,
+    .date-filter-container {
+        margin-left: 0;
+        margin-right: 0;
+        border-radius: 8px;
+        padding: 16px;
+    }
+
+    .select2-container--default .select2-selection--multiple {
+        min-height: 44px !important;
+    }
+
+    .categories {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    .categories button {
+        font-size: 13px;
+        padding: 10px 8px;
+        margin: 2px;
+        max-width: calc(50% - 4px);
+    }
+
+    .bottom-nav {
+        padding: 0;
+    }
+
+    .bottom-nav button {
+        padding: 14px 8px;
+        font-size: 14px;
+    }
+
+    .order-summary, .product-row {
+        margin-left: 0;
+        margin-right: 0;
+        border-radius: 8px;
+        padding: 16px;
+    }
 }
 
-.no-orders::before, .no-more-orders::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
-    border-radius: 16px;
-    pointer-events: none;
+/* Hide categories by default */
+.categories {
+    display: none !important;
 }
 
-.no-orders {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+/* Hide Select2 clear button */
+.select2-selection__clear {
+    display: none !important;
 }
 
-.no-more-orders {
-    background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
-    color: #333;
+/* Orders container padding */
+#orders-container {
+    padding: 0 !important;
 }
 
-#orders-container{
-    padding:0 !important;
-}.select2-selection__clear{	display:none!important}
+/* Order Status Styling */
+.order-status {
+    font-size: 11px;
+    background: #f0f0f0;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-weight: 500;
+    text-transform: none;
+    letter-spacing: 0.3px;
+    color: #666;
+}
+
+/* Specific status backgrounds */
+.order-status.on-hold {
+    background: rgba(255, 193, 7, 0.2);
+    color: #856404;
+    border: 1px solid rgba(255, 193, 7, 0.3);
+}
+
+.order-status.pending {
+    background: rgba(108, 117, 125, 0.2);
+    color: #495057;
+    border: 1px solid rgba(108, 117, 125, 0.3);
+}
+
+.order-status.processing {
+    background: rgba(0, 123, 255, 0.2);
+    color: #0056b3;
+    border: 1px solid rgba(0, 123, 255, 0.3);
+}
+
+.order-status.completed {
+    background: rgba(40, 167, 69, 0.2);
+    color: #155724;
+    border: 1px solid rgba(40, 167, 69, 0.3);
+}
+
+.order-status.cancelled {
+    background: rgba(220, 53, 69, 0.2);
+    color: #721c24;
+    border: 1px solid rgba(220, 53, 69, 0.3);
+}
+
+.order-status.refunded {
+    background: rgba(255, 193, 7, 0.2);
+    color: #856404;
+    border: 1px solid rgba(255, 193, 7, 0.3);
+}
+
+.select2-container .select2-search__field {
+    margin-top: 7px;
+    padding-bottom: 24px !important;
+}
+@media screen and (max-width: 782px) {
+    .tab-content{
+        max-width:100% !important;
+    }
+}

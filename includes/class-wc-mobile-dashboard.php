@@ -363,7 +363,7 @@ class WC_Mobile_Dashboard {
         echo '<div class="order-header">';
         echo '<strong>#' . $order->get_id() . '</strong>';
         echo '<span class="order-date">' . $order->get_date_created()->format('d/m/Y') . '</span>';
-        echo '<span class="order-status">' . wc_get_order_status_name($status) . '</span>';
+        echo '<span class="order-status ' . $status . '">' . wc_get_order_status_name($status) . '</span>';
         echo '</div>';
         echo '<div class="order-customer">' . $order->get_billing_first_name() . ' ' . $order->get_billing_last_name() . '</div>';
         echo '<div class="order-total">' . wc_price($order->get_total()) . '</div>';
